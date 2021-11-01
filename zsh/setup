@@ -1,0 +1,22 @@
+#!/usr/bin/sh
+
+
+# Install Homebrew
+if ! command -v brew &> /dev/null
+then
+    echo "Homebrew not installed"
+    exit
+fi
+
+
+
+
+
+
+
+
+
+
+
+# iterm2 Material Theme
+curl -O https://raw.githubusercontent.com/MartinSeeler/iterm2-material-design/master/material-design-colors.itermcolors
