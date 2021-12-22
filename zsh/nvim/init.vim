@@ -31,6 +31,7 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python
 Plug 'tpope/vim-commentary'                             " better commenting
 Plug 'mhinz/vim-startify'                               " cool start up screen
 Plug 'tpope/vim-fugitive'                               " git support
+Plug 'elixir-editors/vim-elixir'                        " elixir support
 Plug 'psliwka/vim-smoothie'                             " some very smooth ass scrolling
 Plug 'wellle/tmux-complete.vim'                         " complete words from a tmux panes
 Plug 'tpope/vim-eunuch'                                 " run common Unix commands inside Vim
