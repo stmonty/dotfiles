@@ -1,3 +1,4 @@
+;; Monty's Personal Emacs Config
 (setq inhibit-startup-message t)
 
 (scroll-bar-mode -1) ;; Disable visible scrollbar
@@ -19,6 +20,9 @@
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
+
+;; Set backup by copying to preserve hard-links
+(setq backup-by-copying-when-linked t)
 
 ;; Initialize package sources
 (require 'package)
@@ -142,3 +146,8 @@
 
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
+
+(use-package magit
+  :commands magit-status
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
