@@ -1,3 +1,2 @@
-#+TITLE dotfiles
-
+* DOTFILES
 My personal configuration files
