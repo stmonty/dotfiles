@@ -1,4 +1,8 @@
 ;; Monty's Personal Emacs Config
+
+;; Garbage-Collection
+(setq gc-cons-threshhold 100000000)
+
 (setq inhibit-startup-message t)
 
 (scroll-bar-mode -1) ;; Disable visible scrollbar
@@ -24,11 +28,24 @@
 ;; Set backup by copying to preserve hard-links
 (setq backup-by-copying-when-linked t)
 
-;; Initialize package sources
-(require 'package)
+;; Pair Braces and Brackets
+(setq electric-pair-pairs '(
+			    (?\{ . ?\})
+			    (?\( . ?\))
+			    (?\[ . ?\])
+			    (?\" . ?\")
+			    ))
+(electric-pair-mode 1)
+
 
 ;; Make escape quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+;; IBuffer Keybind
+(global-set-key (kbd "C-c i") 'ibuffer)
+
+;; Initialize package sources
+(require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
@@ -46,7 +63,7 @@
 
 ;; Doom Themes
 (use-package doom-themes
-  :init (load-theme 'doom-ir-black t))
+  :init (load-theme 'doom-wilmersdorf t))
 
 ;; Doom-Modeline
 (use-package doom-modeline
@@ -57,6 +74,10 @@
 ;; Make sure to run 'M-x all-the-icons-install-fonts'
 (use-package all-the-icons
   :if (display-graphic-p))
+
+(use-package all-the-icons-dired
+  :after all-the-icons
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -86,7 +107,7 @@
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.3))
+  (setq which-key-idle-delay 0.2))
 
 (use-package ivy-rich
  :init
@@ -109,10 +130,12 @@
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
+  (setq evil-undo-system 'undo-redo)
   :config
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+  (define-key evil-normal-state-map (kbd "M-.") 'find-tag)
 
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
@@ -125,6 +148,20 @@
   :config
   (evil-collection-init))
 
+
+;;(defun evil-insert-jk-for-normal-mode ()
+;;  (interactive)
+;;  (insert "j")
+;;  (let ((event (read-event nil)))
+;;    (if (= event ?k)
+;;	(progn
+;;	  (backward-delete-char 1)
+;;	  (evil-normal-state))
+;;      (push event unread-command-events))))
+;;(define-key evil-insert-state-map (kbd "j") 'evil-insert-jk-for-normal-mode)
+
+
+;; Hydra
 (use-package hydra)
 
 (defhydra hydra-text-scale (:timeout 4)
@@ -133,6 +170,8 @@
 	  ("k" text-scale-decrease "out")
 	  ("f" nil "finished" :exit t))
 
+
+;; Projectile
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
@@ -145,9 +184,88 @@
   (setq projectile-switch-project-action #'projectile-dired))
 
 (use-package counsel-projectile
+  :after projectile
   :config (counsel-projectile-mode))
 
+
+;; IBuffer
+;;(use-package ibuffer-projectile
+;;  :after projectile)
+
+(use-package ibuffer-vc)
+
+
+
+;; Magit
 (use-package magit
   :commands magit-status
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+;; Org Mode
+
+;;(use-package org-bullets
+;;  :after org
+;;  :hook (org-mode . org-bullets-mode)
+;;  :custom
+;;  (org-bullets-bullet-list '()
+
+
+;; Dashboard
+(use-package dashboard
+  :config
+  (dashboard-setup-startup-hook))
+
+(setf dashboard-projects-backend 'projectile
+      dashboard-items '((projects . 5) (recents . 5) (agenda . 5)
+			(bookmarks . 5)))
+
+;; Treemacs
+
+
+
+;; LSP + Languages
+
+;; Eglot
+(use-package eglot)
+
+;;(use-package lsp-mode
+;;  :commands (lsp lsp-deferred)
+;;  :init
+;;  (setq lsp-keymap-prefix "C-c l")
+;;  :config
+;;  (lsp-enable-which-key-integration t))
+
+;; Ruby
+
+
+;; Common Lisp
+(use-package sly)
+
+;; Clojure
+;;(use-package cider)
+
+;; Rust
+
+
+;; C/C++
+(add-to-list 'eglot-server-programs
+	     '((c++-mode c-mode) "clangd-10"))
+(add-hook 'c-mode-hook 'eglot-ensure)
+(add-hook 'c++-mode-hook 'eglot-ensure)
+
+;; Javascript/Typescript
+
+
+;; Python
+(add-hook 'python-mode-hook 'eglot-ensure)
+
+
+;; Golang
+
+
+;; Java
+
+
+;; Scala
+
