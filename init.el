@@ -1,7 +1,12 @@
 ;; Monty's Personal Emacs Config
 
 ;; Garbage-Collection
-(setq gc-cons-threshhold 100000000)
+(setq gc-cons-threshold (* 20 1024 1024))
+;; (let ((normal-gc-cons-threshold (* 20 1024 1024))
+;;       (init-gc-cons-threshold (* 128 1024 1024)))
+;;   (setq gc-cons-threshold init-gc-cons-threshold)
+;;   (add-hook 'emacs-startup-hook
+;;             (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
 
 (setq inhibit-startup-message t)
 
@@ -21,6 +26,7 @@
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
+;; Custom variables
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
@@ -44,6 +50,13 @@
 ;; IBuffer Keybind
 (global-set-key (kbd "C-c i") 'ibuffer)
 
+;; Indenting
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
+(setq ruby-indent-level 4)
+(setq-default c-basic-offset 4)
+
 ;; Initialize package sources
 (require 'package)
 
@@ -63,7 +76,7 @@
 
 ;; Doom Themes
 (use-package doom-themes
-  :init (load-theme 'doom-wilmersdorf t))
+  :init (load-theme 'doom-vibrant))
 
 ;; Doom-Modeline
 (use-package doom-modeline
@@ -110,8 +123,9 @@
   (setq which-key-idle-delay 0.2))
 
 (use-package ivy-rich
- :init
- (ivy-rich-mode 1))
+  :after ivy
+  :config
+  (ivy-rich-mode 1))
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
@@ -121,32 +135,32 @@
 	 ("C-r" . 'counsel-minibuffer-history)))
 
 
+;;(when (eq system-type 'darwin)
+;;Evil Mode
+ (use-package evil
+   :init
+   (setq evil-want-integration t)
+   (setq evil-want-keybinding nil)
+   (setq evil-want-C-u-scroll t)
+   (setq evil-want-C-i-jump nil)
+   (setq evil-undo-system 'undo-redo)
+   :config
+   (evil-mode 1)
+   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+   (define-key evil-normal-state-map (kbd "M-.") 'find-tag)
 
-;; Evil Mode
+   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
-(use-package evil
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-i-jump nil)
-  (setq evil-undo-system 'undo-redo)
-  :config
-  (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-  (define-key evil-normal-state-map (kbd "M-.") 'find-tag)
+   (evil-set-initial-state 'messages-buffer-mode 'normal)
+   (evil-set-initial-state 'dashboard-mode 'normal))
 
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
-
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
+ (use-package evil-collection
+   :after evil
+   :config
+   (evil-collection-init))
+;;)
 
 
 ;;(defun evil-insert-jk-for-normal-mode ()
@@ -194,8 +208,6 @@
 
 (use-package ibuffer-vc)
 
-
-
 ;; Magit
 (use-package magit
   :commands magit-status
@@ -220,8 +232,27 @@
       dashboard-items '((projects . 5) (recents . 5) (agenda . 5)
 			(bookmarks . 5)))
 
-;; Treemacs
+;; Company
+(use-package company
+  :bind (:map prog-mode-map
+              ("C-i" . company-indent-or-complete-common)
+              ("C-M-i" . counsel-company))
+  :hook
+  (emacs-lisp-mode . company-mode)
+  (c-mode . company-mode)
+  :config
+  (setq company-idle-delay 1))
 
+
+;; Treemacs
+(use-package treemacs
+  :bind ("C-c S" . treemacs))
+
+(use-package dired-sidebar
+  :bind ("C-c s" . dired-sidebar-toggle-sidebar))
+
+
+;; EShell
 
 
 ;; LSP + Languages
@@ -229,23 +260,25 @@
 ;; Eglot
 (use-package eglot)
 
-;;(use-package lsp-mode
-;;  :commands (lsp lsp-deferred)
-;;  :init
-;;  (setq lsp-keymap-prefix "C-c l")
-;;  :config
-;;  (lsp-enable-which-key-integration t))
-
 ;; Ruby
+(add-hook 'ruby-mode-hook 'eglot-ensure)
 
 
 ;; Common Lisp
 (use-package sly)
 
+;; Scheme - Guile
+(use-package geiser)
+
+(use-package geiser-guile
+  :after geiser)
+
+
 ;; Clojure
 ;;(use-package cider)
 
 ;; Rust
+(use-package rust-mode)
 
 
 ;; C/C++
@@ -257,10 +290,6 @@
 ;; Javascript/Typescript
 
 
-;; Python
-(add-hook 'python-mode-hook 'eglot-ensure)
-
-
 ;; Golang
 
 
@@ -268,4 +297,8 @@
 
 
 ;; Scala
+
+
+;; Python
+;;(add-hook 'python-mode-hook 'eglot-ensure)
 
