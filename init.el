@@ -135,45 +135,11 @@
 	 ("C-r" . 'counsel-minibuffer-history)))
 
 
-;;(when (eq system-type 'darwin)
-;;Evil Mode
- (use-package evil
-   :init
-   (setq evil-want-integration t)
-   (setq evil-want-keybinding nil)
-   (setq evil-want-C-u-scroll t)
-   (setq evil-want-C-i-jump nil)
-   (setq evil-undo-system 'undo-redo)
-   :config
-   (evil-mode 1)
-   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-   (define-key evil-normal-state-map (kbd "M-.") 'find-tag)
-
-   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
-   (evil-set-initial-state 'messages-buffer-mode 'normal)
-   (evil-set-initial-state 'dashboard-mode 'normal))
-
- (use-package evil-collection
-   :after evil
-   :config
-   (evil-collection-init))
-;;)
-
-
-;;(defun evil-insert-jk-for-normal-mode ()
-;;  (interactive)
-;;  (insert "j")
-;;  (let ((event (read-event nil)))
-;;    (if (= event ?k)
-;;	(progn
-;;	  (backward-delete-char 1)
-;;	  (evil-normal-state))
-;;      (push event unread-command-events))))
-;;(define-key evil-insert-state-map (kbd "j") 'evil-insert-jk-for-normal-mode)
-
+(use-package god-mode
+  :bind
+  ("C-c z" . god-mode)
+  :config
+  (define-key god-local-mode-map (kbd "i") #'god-local-mode))
 
 ;; Hydra
 (use-package hydra)
@@ -298,7 +264,4 @@
 
 ;; Scala
 
-
-;; Python
-;;(add-hook 'python-mode-hook 'eglot-ensure)
 
