@@ -103,8 +103,8 @@
 	 :map ivy-minibuffer-map
 	 ("TAB" . ivy-alt-done)
 	 ("C-l" . ivy-alt-done)
-	 ("C-j" . ivy-next-line)
-	 ("C-k" . ivy-previous-line)
+	 ("C-n" . ivy-next-line)
+	 ("C-p" . ivy-previous-line)
 	 :map ivy-switch-buffer-map
 	 ("C-k" . ivy-previous-line)
 	 ("C-l" . ivy-done)
@@ -180,15 +180,6 @@
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-;; Org Mode
-
-;;(use-package org-bullets
-;;  :after org
-;;  :hook (org-mode . org-bullets-mode)
-;;  :custom
-;;  (org-bullets-bullet-list '()
-
-
 ;; Dashboard
 (use-package dashboard
   :config
@@ -257,11 +248,12 @@
 
 
 ;; Golang
-
+(use-package go-mode)
 
 ;; Java
 
 
 ;; Scala
+
 
 
