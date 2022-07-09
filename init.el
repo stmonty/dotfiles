@@ -50,6 +50,10 @@
 ;; IBuffer Keybind
 (global-set-key (kbd "C-c i") 'ibuffer)
 
+;; MacOS specific
+(when (eq system-type 'darwin)
+  (load-file "~/.emacs.d/macos.el"))
+
 ;; Indenting
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -76,7 +80,7 @@
 
 ;; Doom Themes
 (use-package doom-themes
-  :init (load-theme 'doom-vibrant))
+  :init (load-theme 'doom-one-light))
 
 ;; Doom-Modeline
 (use-package doom-modeline
