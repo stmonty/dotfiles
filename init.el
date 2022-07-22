@@ -26,6 +26,7 @@
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
+
 ;; Custom variables
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (when (file-exists-p custom-file)
@@ -41,6 +42,11 @@
 			    (?\[ . ?\])
 			    (?\" . ?\")
 			    ))
+
+;; Set font size
+(set-face-attribute 'default nil :height 120)
+
+
 (electric-pair-mode 1)
 
 
@@ -80,7 +86,7 @@
 
 ;; Doom Themes
 (use-package doom-themes
-  :init (load-theme 'doom-one-light))
+  :init (load-theme 'doom-nord-aurora))
 
 ;; Doom-Modeline
 (use-package doom-modeline
@@ -202,19 +208,32 @@
   (emacs-lisp-mode . company-mode)
   (c-mode . company-mode)
   :config
-  (setq company-idle-delay 1))
+  (setq company-idle-delay 0))
 
 
 ;; Treemacs
 (use-package treemacs
   :bind ("C-c S" . treemacs))
 
+;; Dired
 (use-package dired-sidebar
   :bind ("C-c s" . dired-sidebar-toggle-sidebar))
 
 
+;; Dirvish
+(use-package dirvish
+  :init
+  (dirvish-override-dired-mode)
+  :bind
+  ("C-c d" . dirvish))
+
 ;; EShell
 
+
+;; Docker
+(use-package docker
+  :ensure t
+  :bind ("C-c D" . docker))
 
 ;; LSP + Languages
 
@@ -236,7 +255,7 @@
 
 
 ;; Clojure
-;;(use-package cider)
+(use-package cider)
 
 ;; Rust
 (use-package rust-mode)
@@ -244,7 +263,7 @@
 
 ;; C/C++
 (add-to-list 'eglot-server-programs
-	     '((c++-mode c-mode) "clangd-10"))
+	     '((c++-mode c-mode) "clangd"))
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
@@ -258,6 +277,5 @@
 
 
 ;; Scala
-
 
 
