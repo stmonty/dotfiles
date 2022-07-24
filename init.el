@@ -240,7 +240,7 @@
 ;; Eglot
 (use-package eglot)
 
-;; Ruby
+;; Ruby - gem install solargraph
 (add-hook 'ruby-mode-hook 'eglot-ensure)
 
 
@@ -275,7 +275,8 @@
 
 ;; Java
 
+;; Elixir
+;;(use-package elixir-mode)
 
-;; Scala
-
-
+;; Crystal
+;;(use-package crystal-mode)
