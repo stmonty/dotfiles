@@ -269,9 +269,11 @@
 
 ;; Javascript/Typescript
 
+;; Scala
+(use-package scala-mode
+  :interpreter
+  ("scala" . scala-mode))
 
-;; Golang
-(use-package go-mode)
 
 ;; Java
 
