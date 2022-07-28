@@ -91,9 +91,10 @@
 
 ;; MacOS specific
 (when (eq system-type 'darwin)
-  (load-file "~/.emacs.d/macos.el")
-  (use-package exec-path-from-shell)
-  (exec-path-from-shell-initialize))
+  (load-file "~/.emacs.d/macos.el"))
+
+(use-package exec-path-from-shell)
+(exec-path-from-shell-initialize)
 
 ;; Doom Themes
 (use-package doom-themes
@@ -228,7 +229,11 @@
   :hook
   (prog-mode . company-mode) ;;Start in all programming buffers
   :config
-  (setq company-idle-delay 0.2))
+  (setq company-idle-delay 0.2)
+  (setq company-tooltip-limit 5)
+  (setq company-minimum-prefix-length 3)
+  (setq company-selection-wrap-around t)
+  (setq company-require-match 'never))
 
 ;; Git Gutter
 ;; Credit to Ian Y.E Pan for these code snippets
