@@ -16,6 +16,7 @@
 (set-fringe-mode 10)
 
 (menu-bar-mode -1)
+(setq ring-bell-function 'ignore)
 
 (column-number-mode)
 (global-display-line-numbers-mode t)
@@ -98,7 +99,7 @@
 
 ;; Doom Themes
 (use-package doom-themes
-  :init (load-theme 'doom-nord-aurora))
+  :init (load-theme 'doom-palenight))
 
 ;; Doom-Modeline
 (use-package doom-modeline
