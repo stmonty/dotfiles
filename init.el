@@ -73,6 +73,22 @@
 (setq ruby-indent-level 4)
 (setq-default c-basic-offset 4)
 
+;; Splitting of Windows
+(defun stm/split-horizontally ()
+    "Split window below"
+  (interactive)
+  (split-window-below)
+  (other-window 1))
+
+(defun stm/split-vertically ()
+    "Split window right"
+  (interactive)
+  (split-window-right)
+  (other-window 1))
+
+(global-set-key (kbd "C-x 2") #'stm/split-horizontally)
+(global-set-key (kbd "C-x 3") #'stm/split-vertically)
+
 ;; Initialize package sources
 (require 'package)
 
@@ -94,12 +110,13 @@
 (when (eq system-type 'darwin)
   (load-file "~/.emacs.d/macos.el"))
 
+;; exec-path-from-shell
 (use-package exec-path-from-shell)
 (exec-path-from-shell-initialize)
 
 ;; Doom Themes
 (use-package doom-themes
-  :init (load-theme 'doom-palenight))
+  :init (load-theme 'doom-nord-aurora))
 
 ;; Doom-Modeline
 (use-package doom-modeline
@@ -128,44 +145,84 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-;; Ivy
-(use-package ivy
-
-  :diminish
-  :bind (("C-s" . swiper)
-	 :map ivy-minibuffer-map
-	 ("TAB" . ivy-alt-done)
-	 ("C-l" . ivy-alt-done)
-	 ("C-n" . ivy-next-line)
-	 ("C-p" . ivy-previous-line)
-	 :map ivy-switch-buffer-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-l" . ivy-done)
-	 ("C-d" . ivy-switch-buffer-kill)
-	 :map ivy-reverse-i-search-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-d" . ivy-reverse-i-search-kill))
+(use-package rainbow-mode
   :config
-  (ivy-mode 1))
+  (rainbow-mode +1))
 
+;; Completions
+(use-package vertico
+  :custom
+  (vertico-cycle t)
+  :init
+  (vertico-mode))
+
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+(use-package marginalia
+  :after vertico
+  :init
+  (marginalia-mode 1))
+
+(use-package consult
+  :bind
+  ;; C-# bindings
+  ("C-s" . consult-line)
+  ("C-x b" . consult-buffer)
+  ;; M-# bindings
+  ("M-g g" . consult-goto-line)
+  ("M-g M-g" . consult-goto-line)
+  ;; M-s bindings (search-map)
+  ("M-s d" . consult-find)
+  ("M-s D" . consult-locate)
+  ("M-s g" . consult-grep)
+  ("M-s G" . consult-git-grep)
+  ("M-s r" . consult-ripgrep)
+  ("M-s l" . consult-line)
+  ("M-s L" . consult-line-multi)
+  ("M-s m" . consult-multi-occur)
+  ("M-s k" . consult-keep-lines)
+  ("M-s u" . consult-focus-lines)
+  :map minibuffer-local-map
+  ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+  ("M-r" . consult-history) 
+  :config
+  (setq completion-in-region-function
+        (lambda (&rest args)
+          (apply (if vertico-mode
+                     #'consult-completion-in-region
+                   #'completion--in-region)
+                 args))))
+
+;; Company
+(use-package company
+  :bind (:map prog-mode-map
+              ("C-i" . company-indent-or-complete-common)
+              ("C-M-i" . counsel-company))
+  :config
+  (setq company-idle-delay 0.2)
+  (setq company-tooltip-limit 5)
+  (setq company-minimum-prefix-length 3)
+  (setq company-selection-wrap-around t)
+  (setq company-require-match 'never)
+  (global-company-mode))
 
 (use-package which-key
-  :init (which-key-mode)
+  :init
+  (which-key-mode)
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 0.2))
 
-(use-package ivy-rich
-  :after ivy
+(use-package all-the-icons-completion
+  :after (all-the-icons marginalia)
   :config
-  (ivy-rich-mode 1))
-
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
-	 ("C-x C-f" . counsel-find-file)
-	 :map minibuffer-local-map
-	 ("C-r" . 'counsel-minibuffer-history)))
+  (add-hook 'marginalia-mode-hook
+            #'all-the-icons-completion-marginalia-setup)
+  (all-the-icons-completion-mode))
 
 
 (use-package god-mode
@@ -188,18 +245,13 @@
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
-  :custom ((projectile-completion-system 'ivy))
+  :custom ((projectile-completion-system 'default))
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
   (when (file-directory-p "~/repos")
     (setq projectile-project-search-path '("~/repos")))
   (setq projectile-switch-project-action #'projectile-dired))
-
-(use-package counsel-projectile
-  :after projectile
-  :config (counsel-projectile-mode))
-
 
 ;; IBuffer
 ;;(use-package ibuffer-projectile
@@ -209,6 +261,8 @@
 
 ;; Magit
 (use-package magit
+  :if
+  (executable-find "git")
   :commands magit-status
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
@@ -222,19 +276,6 @@
       dashboard-items '((projects . 5) (recents . 5) (agenda . 5)
 			(bookmarks . 5)))
 
-;; Company
-(use-package company
-  :bind (:map prog-mode-map
-              ("C-i" . company-indent-or-complete-common)
-              ("C-M-i" . counsel-company))
-  :hook
-  (prog-mode . company-mode) ;;Start in all programming buffers
-  :config
-  (setq company-idle-delay 0.2)
-  (setq company-tooltip-limit 5)
-  (setq company-minimum-prefix-length 3)
-  (setq company-selection-wrap-around t)
-  (setq company-require-match 'never))
 
 ;; Git Gutter
 ;; Credit to Ian Y.E Pan for these code snippets

@@ -16,11 +16,18 @@
 (set-fringe-mode 10)
 
 (menu-bar-mode -1)
+(setq ring-bell-function 'ignore)
 
 (column-number-mode)
 (global-display-line-numbers-mode t)
 
 (setq auto-save-default nil)
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+      backup-by-copying t
+      version-control t
+      delete-old-versions t
+      kept-new-versions 10
+      kept-old-versions 5)
 
 (dolist (mode '(org-mode-hook
 		term-mode-hook
@@ -58,9 +65,6 @@
 ;; IBuffer Keybind
 (global-set-key (kbd "C-c i") 'ibuffer)
 
-;; MacOS specific
-(when (eq system-type 'darwin)
-  (load-file "~/.emacs.d/macos.el"))
 
 ;; Indenting
 (setq-default indent-tabs-mode nil)
@@ -86,9 +90,16 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;; MacOS specific
+(when (eq system-type 'darwin)
+  (load-file "~/.emacs.d/macos.el"))
+
+(use-package exec-path-from-shell)
+(exec-path-from-shell-initialize)
+
 ;; Doom Themes
 (use-package doom-themes
-  :init (load-theme 'doom-nord-aurora))
+  :init (load-theme 'doom-palenight))
 
 ;; Doom-Modeline
 (use-package doom-modeline
@@ -219,7 +230,11 @@
   :hook
   (prog-mode . company-mode) ;;Start in all programming buffers
   :config
-  (setq company-idle-delay 0.2))
+  (setq company-idle-delay 0.2)
+  (setq company-tooltip-limit 5)
+  (setq company-minimum-prefix-length 3)
+  (setq company-selection-wrap-around t)
+  (setq company-require-match 'never))
 
 ;; Git Gutter
 ;; Credit to Ian Y.E Pan for these code snippets
