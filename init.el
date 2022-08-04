@@ -86,8 +86,15 @@
   (split-window-right)
   (other-window 1))
 
+(defun stm/split-eshell ()
+    "Opens eshell in a bottom window"
+    (interactive)
+    (stm/split-horizontally)
+    (eshell))
+
 (global-set-key (kbd "C-x 2") #'stm/split-horizontally)
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
+(global-set-key (kbd "C-c e") #'stm/split-eshell)
 
 ;; Initialize package sources
 (require 'package)
