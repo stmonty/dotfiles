@@ -1,12 +1,13 @@
 ;; Monty's Personal Emacs Config
 
 ;; Garbage-Collection
-(setq gc-cons-threshold (* 20 1024 1024))
+(setq gc-cons-threshold 100000000)
 ;; (let ((normal-gc-cons-threshold (* 20 1024 1024))
 ;;       (init-gc-cons-threshold (* 128 1024 1024)))
 ;;   (setq gc-cons-threshold init-gc-cons-threshold)
 ;;   (add-hook 'emacs-startup-hook
 ;;             (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+(setq read-process-output-max (* 1024 1024))
 
 (setq inhibit-startup-message t)
 
@@ -69,7 +70,7 @@
 ;; Indenting
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
-(setq indent-line-function 'insert-tab)
+(setq indent-line-function 'insert-relative)
 (setq ruby-indent-level 4)
 (setq-default c-basic-offset 4)
 
@@ -192,10 +193,7 @@
   ("M-s L" . consult-line-multi)
   ("M-s m" . consult-multi-occur)
   ("M-s k" . consult-keep-lines)
-  ("M-s u" . consult-focus-lines)
-  :map minibuffer-local-map
-  ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-  ("M-r" . consult-history) 
+  ("M-s u" . consult-focus-lines) 
   :config
   (setq completion-in-region-function
         (lambda (&rest args)
@@ -208,7 +206,7 @@
 (use-package company
   :bind (:map prog-mode-map
               ("C-i" . company-indent-or-complete-common)
-              ("C-M-i" . counsel-company))
+              ("C-M-i" . company-complete))
   :config
   (setq company-idle-delay 0.2)
   (setq company-tooltip-limit 5)
@@ -348,7 +346,9 @@
 
 
 ;; Clojure
-(use-package cider)
+(use-package clojure-mode)
+(use-package cider
+  :after clojure-mode)
 
 ;; Rust
 (use-package rust-mode)
