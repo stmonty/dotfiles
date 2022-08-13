@@ -71,7 +71,8 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-relative)
-(setq ruby-indent-level 4)
+;; Controls tab-width in Ruby-mode
+(setq ruby-indent-level 2)
 (setq-default c-basic-offset 4)
 
 ;; Splitting of Windows
@@ -124,7 +125,7 @@
 
 ;; Doom Themes
 (use-package doom-themes
-  :init (load-theme 'doom-nord-aurora))
+  :init (load-theme 'doom-palenight))
 
 ;; Doom-Modeline
 (use-package doom-modeline
@@ -208,9 +209,9 @@
               ("C-i" . company-indent-or-complete-common)
               ("C-M-i" . company-complete))
   :config
-  (setq company-idle-delay 0.2)
+  (setq company-idle-delay 0.1)
   (setq company-tooltip-limit 5)
-  (setq company-minimum-prefix-length 3)
+  (setq company-minimum-prefix-length 2)
   (setq company-selection-wrap-around t)
   (setq company-require-match 'never)
   (global-company-mode))
@@ -322,6 +323,13 @@
 (use-package docker
   :ensure t
   :bind ("C-c D" . docker))
+
+;; Dumb-Jump
+(use-package dumb-jump
+  :hook
+  (xref-backend-functions . dumb-jump-xref-activate)
+  :init
+  (dumb-jump-mode))
 
 ;; LSP + Languages
 
