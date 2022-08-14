@@ -211,7 +211,7 @@
   :config
   (setq company-idle-delay 0.1)
   (setq company-tooltip-limit 5)
-  (setq company-minimum-prefix-length 3)
+  (setq company-minimum-prefix-length 2)
   (setq company-selection-wrap-around t)
   (setq company-require-match 'never)
   (global-company-mode))
