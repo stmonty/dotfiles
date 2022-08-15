@@ -208,7 +208,7 @@
   :bind (:map prog-mode-map
               ("C-i" . company-indent-or-complete-common)
               ("C-M-i" . company-complete))
-  :config
+  :init
   (setq company-idle-delay 0.1)
   (setq company-tooltip-limit 5)
   (setq company-minimum-prefix-length 2)
