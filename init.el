@@ -329,6 +329,7 @@
   :hook
   (xref-backend-functions . dumb-jump-xref-activate)
   :init
+  (setq dumb-jump-force-searcher 'rg)
   (setq dumb-jump-disable-obsolete-warnings t)
   (dumb-jump-mode))
 
