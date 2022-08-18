@@ -63,10 +63,6 @@
 ;; Make escape quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-;; IBuffer Keybind
-(global-set-key (kbd "C-c i") 'ibuffer)
-
-
 ;; Indenting
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -332,6 +328,30 @@
   (setq dumb-jump-force-searcher 'rg)
   (setq dumb-jump-disable-obsolete-warnings t)
   (dumb-jump-mode))
+
+
+;; Org Mode and Roam
+(use-package org-roam
+  :custom
+  (org-roam-directory "~/roam")
+  :bind
+  (("C-c n l" . org-roam-buffer-toggle)
+   ("C-c n f" . org-roam-node-find)
+   ("C-c n i" . org-roam-node-insert))
+  :config
+  (org-roam-setup)
+  (org-roam-db-autosync-mode))
+
+(use-package websocket
+  :after org-roam)
+
+(use-package org-roam-ui
+  :after org-roam
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
 
 ;; LSP + Languages
 
