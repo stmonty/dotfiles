@@ -121,7 +121,9 @@
 
 ;; Doom Themes
 (use-package doom-themes
-  :init (load-theme 'doom-palenight))
+  :init
+  ;;(setq doom-vibrant-brighter-comments t)
+  (load-theme 'doom-ir-black))
 
 ;; Doom-Modeline
 (use-package doom-modeline
