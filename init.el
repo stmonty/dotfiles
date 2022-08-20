@@ -399,6 +399,8 @@
   :interpreter
   ("scala" . scala-mode))
 
+;; Haskell
+(use-package haskell-mode)
 
 ;; Java
 
