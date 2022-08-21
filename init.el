@@ -54,7 +54,7 @@
 			    ))
 
 ;; Set font size
-(set-face-attribute 'default nil :height 120)
+(set-face-attribute 'default nil :height 130)
 
 
 (electric-pair-mode 1)
@@ -123,7 +123,7 @@
 (use-package doom-themes
   :init
   ;;(setq doom-vibrant-brighter-comments t)
-  (load-theme 'doom-ir-black))
+  (load-theme 'doom-palenight))
 
 ;; Doom-Modeline
 (use-package doom-modeline
