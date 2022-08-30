@@ -124,7 +124,8 @@
   :init
   ;;(setq doom-vibrant-brighter-comments t)
   (load-theme 'doom-vibrant)
-  (setq doom-themes-treemacs-theme "doom-atom"))
+  (setq doom-themes-treemacs-theme "doom-colors")
+  (doom-themes-treemacs-config))
 
 ;; Doom-Modeline
 (use-package doom-modeline
