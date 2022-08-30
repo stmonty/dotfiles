@@ -1,7 +1,7 @@
 ;; Monty's Personal Emacs Config
 
 ;; Garbage-Collection
-(setq gc-cons-threshold 100000000)
+(setq gc-cons-threshold 10000000)
 ;; (let ((normal-gc-cons-threshold (* 20 1024 1024))
 ;;       (init-gc-cons-threshold (* 128 1024 1024)))
 ;;   (setq gc-cons-threshold init-gc-cons-threshold)
