@@ -123,7 +123,8 @@
 (use-package doom-themes
   :init
   ;;(setq doom-vibrant-brighter-comments t)
-  (load-theme 'doom-palenight))
+  (load-theme 'doom-vibrant)
+  (setq doom-themes-treemacs-theme "doom-one"))
 
 ;; Doom-Modeline
 (use-package doom-modeline
@@ -300,11 +301,11 @@
 
 ;; Treemacs
 (use-package treemacs
-  :bind ("C-c S" . treemacs))
+  :bind ("C-c s" . treemacs))
 
 ;; Dired
 (use-package dired-sidebar
-  :bind ("C-c s" . dired-sidebar-toggle-sidebar))
+  :bind ("C-c S" . dired-sidebar-toggle-sidebar))
 
 
 ;; Dirvish
