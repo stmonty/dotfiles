@@ -274,13 +274,13 @@
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
 ;; Dashboard
-(use-package dashboard
-  :config
-  (dashboard-setup-startup-hook))
+;; (use-package dashboard
+;;   :config
+;;   (dashboard-setup-startup-hook))
 
-(setf dashboard-projects-backend 'projectile
-      dashboard-items '((projects . 5) (recents . 5) (agenda . 5)
-			(bookmarks . 5)))
+;; (setf dashboard-projects-backend 'projectile
+;;       dashboard-items '((projects . 5) (recents . 5) (agenda . 5)
+;; 			(bookmarks . 5)))
 
 
 ;; Git Gutter
