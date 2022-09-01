@@ -1,7 +1,7 @@
 ;; Monty's Personal Emacs Config
 
 ;; Garbage-Collection
-(setq gc-cons-threshold 10000000)
+(setq gc-cons-threshold 1000000)
 ;; (let ((normal-gc-cons-threshold (* 20 1024 1024))
 ;;       (init-gc-cons-threshold (* 128 1024 1024)))
 ;;   (setq gc-cons-threshold init-gc-cons-threshold)
@@ -122,7 +122,7 @@
 ;; Doom Themes
 (use-package doom-themes
   :init
-  ;;(setq doom-vibrant-brighter-comments t)
+  (setq doom-vibrant-brighter-modeline t)
   (load-theme 'doom-vibrant)
   (setq doom-themes-treemacs-theme "doom-colors")
   (doom-themes-treemacs-config))
@@ -132,12 +132,13 @@
 ;;   :ensure t
 ;;   :init (doom-modeline-mode 1))
 
-;; Moody
+;; Moody Modeline
 (use-package moody
     :config
     (moody-replace-mode-line-buffer-identification)
     (moody-replace-vc-mode))
 
+;; Minions - To control minor modes in modeline
 (use-package minions
   :config
   (minions-mode 1))
@@ -237,22 +238,6 @@
   (all-the-icons-completion-mode))
 
 
-(use-package god-mode
-  :bind
-  ("C-c z" . god-mode)
-  :config
-  (define-key god-local-mode-map (kbd "i") #'god-local-mode))
-
-;; Hydra
-(use-package hydra)
-
-(defhydra hydra-text-scale (:timeout 4)
-	  "Scale Text"
-	  ("j" text-scale-increase "in")
-	  ("k" text-scale-decrease "out")
-	  ("f" nil "finished" :exit t))
-
-
 ;; Projectile
 (use-package projectile
   :diminish projectile-mode
@@ -264,12 +249,6 @@
   (when (file-directory-p "~/repos")
     (setq projectile-project-search-path '("~/repos")))
   (setq projectile-switch-project-action #'projectile-dired))
-
-;; IBuffer
-;;(use-package ibuffer-projectile
-;;  :after projectile)
-
-(use-package ibuffer-vc)
 
 ;; Magit
 (use-package magit
@@ -395,7 +374,6 @@
 
 ;; Rust
 (use-package rust-mode)
-
 
 ;; C/C++
 (add-to-list 'eglot-server-programs
