@@ -128,19 +128,19 @@
   (doom-themes-treemacs-config))
 
 ;; Doom-Modeline
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :init (doom-modeline-mode 1))
 
 ;; Moody
-;; (use-package moody
-;;     :config
-;;     (moody-replace-mode-line-buffer-identification)
-;;     (moody-replace-vc-mode))
+(use-package moody
+    :config
+    (moody-replace-mode-line-buffer-identification)
+    (moody-replace-vc-mode))
 
-;; (use-package minions
-;;   :config
-;;   (minions-mode 1))
+(use-package minions
+  :config
+  (minions-mode 1))
 
 ;; All The Icons
 ;; Make sure to run 'M-x all-the-icons-install-fonts'
