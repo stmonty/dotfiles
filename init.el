@@ -158,6 +158,12 @@
   :config
   (rainbow-mode +1))
 
+(use-package highlight-indent-guides
+  :hook
+  (prog-mode . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'character))
+
 ;; Completions
 (use-package vertico
   :custom
@@ -290,6 +296,9 @@
   (prog-mode . git-gutter-mode)
   :config
   (setq git-gutter:update-interval 0.02))
+  ;; Note that this is only to make git gutter work for Non-Doom themes
+  ;; Comment this out and uncomment git-gutter-fringe for Doom-Themes
+  ;;(setq git-gutter:added-sign " "))
 
 (use-package git-gutter-fringe
   :config
