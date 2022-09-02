@@ -300,6 +300,8 @@
 (use-package centaur-tabs
   :init
   (setq centaur-tabs-set-icons t)
+  (setq centaur-tabs-gray-out-icons 'buffer)
+  (setq centaur-tabs-set-bar 'left)
   (setq centaur-tabs-style "bar")
   (centaur-tabs-mode t)
   :bind
