@@ -296,6 +296,17 @@
 (use-package dired-sidebar
   :bind ("C-c S" . dired-sidebar-toggle-sidebar))
 
+;; Centaur Tabs
+(use-package centaur-tabs
+  :init
+  (setq centaur-tabs-set-icons t)
+  (setq centaur-tabs-plain-icons t)
+  (setq centaur-tabs-style "bar")
+  (centaur-tabs-mode t)
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward))
+
 
 ;; Dirvish
 (use-package dirvish
@@ -382,6 +393,11 @@
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
 ;; Javascript/Typescript
+(use-package tide
+  :hook
+  ((typescript-mode . tide-setup)
+   (typescript-mode . tide-hl-identifier-mode)
+   (before-save . tide-format-before-save)))
 
 ;; Scala
 (use-package scala-mode
