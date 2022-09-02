@@ -300,7 +300,6 @@
 (use-package centaur-tabs
   :init
   (setq centaur-tabs-set-icons t)
-  (setq centaur-tabs-plain-icons t)
   (setq centaur-tabs-style "bar")
   (centaur-tabs-mode t)
   :bind
