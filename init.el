@@ -110,6 +110,7 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+(setq use-package-compute-statistics t)
 
 ;; MacOS specific
 (when (eq system-type 'darwin)
@@ -297,16 +298,16 @@
   :bind ("C-c S" . dired-sidebar-toggle-sidebar))
 
 ;; Centaur Tabs
-(use-package centaur-tabs
-  :init
-  (setq centaur-tabs-set-icons t)
-  (setq centaur-tabs-gray-out-icons 'buffer)
-  (setq centaur-tabs-set-bar 'left)
-  (setq centaur-tabs-style "bar")
-  (centaur-tabs-mode t)
-  :bind
-  ("C-<prior>" . centaur-tabs-backward)
-  ("C-<next>" . centaur-tabs-forward))
+;; (use-package centaur-tabs
+;;   :init
+;;   (setq centaur-tabs-set-icons t)
+;;   (setq centaur-tabs-gray-out-icons 'buffer)
+;;   (setq centaur-tabs-set-bar 'left)
+;;   (setq centaur-tabs-style "bar")
+;;   (centaur-tabs-mode t)
+;;   :bind
+;;   ("C-<prior>" . centaur-tabs-backward)
+;;   ("C-<next>" . centaur-tabs-forward))
 
 
 ;; Dirvish
@@ -378,7 +379,6 @@
 (use-package geiser-guile
   :after geiser)
 
-
 ;; Clojure
 (use-package clojure-mode)
 (use-package cider
@@ -394,11 +394,11 @@
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
 ;; Javascript/Typescript
-(use-package tide
-  :hook
-  ((typescript-mode . tide-setup)
-   (typescript-mode . tide-hl-identifier-mode)
-   (before-save . tide-format-before-save)))
+;; (use-package tide
+;;   :hook
+;;   ((typescript-mode . tide-setup)
+;;    (typescript-mode . tide-hl-identifier-mode)
+;;    (before-save . tide-format-before-save)))
 
 ;; Scala
 (use-package scala-mode
