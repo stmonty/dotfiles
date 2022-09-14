@@ -54,7 +54,7 @@
 			    ))
 
 ;; Set font size
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 120)
 
 
 (electric-pair-mode 1)
@@ -124,7 +124,11 @@
 (use-package doom-themes
   :init
   (setq doom-vibrant-brighter-modeline t)
-  (load-theme 'doom-vibrant)
+  (setq doom-city-lights-brighter-modeline t
+        doom-city-lights-brighter-comments t
+        doom-city-lights-comment-bg nil)
+;;  (setq doom-dracula-brighter-modeline t)
+  (load-theme 'doom-dracula)
   (setq doom-themes-treemacs-theme "doom-colors")
   (doom-themes-treemacs-config))
 
@@ -336,6 +340,44 @@
 
 
 ;; Org Mode and Roam
+(defun stm/org-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1))
+
+(defun stm/org-font-setup ()
+  ;; Replace list hyphen with dot
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+  ;; Set faces for heading levels
+  ;; (dolist (face '((org-level-1 . 1.2)
+  ;;                 (org-level-2 . 1.1)
+  ;;                 (org-level-3 . 1.05)
+  ;;                 (org-level-4 . 1.0)
+  ;;                 (org-level-5 . 1.1)
+  ;;                 (org-level-6 . 1.1)
+  ;;                 (org-level-7 . 1.1)
+  ;;                 (org-level-8 . 1.1)))
+  ;;   (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+
+  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
+
+(use-package org
+  :hook
+  (org-mode . stm/org-setup)
+  :config
+  (setq org-ellipsis " ▾")
+  (stm/org-font-setup)
+  )
+
 (use-package org-roam
   :custom
   (org-roam-directory "~/roam")
@@ -406,7 +448,9 @@
   ("scala" . scala-mode))
 
 ;; Haskell
-(use-package haskell-mode)
+(use-package haskell-mode
+  :hook
+  (haskell-mode . eglot-ensure))
 
 ;; Java
 
