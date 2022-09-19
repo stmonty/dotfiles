@@ -14,7 +14,7 @@
 (scroll-bar-mode -1) ;; Disable visible scrollbar
 (tool-bar-mode -1)   ;; Disable the toolbar
 (tooltip-mode -1)    ;; Disable the tooltips
-(set-fringe-mode 10)
+(set-fringe-mode 5)
 
 (menu-bar-mode -1)
 (setq ring-bell-function 'ignore)
