@@ -321,9 +321,6 @@
   :bind
   ("C-c d" . dirvish))
 
-;; EShell
-
-
 ;; Docker
 (use-package docker
   :ensure t
