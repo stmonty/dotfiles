@@ -129,8 +129,10 @@
         doom-city-lights-comment-bg nil)
 ;;  (setq doom-dracula-brighter-modeline t)
   (load-theme 'doom-dracula)
+  :config
   (setq doom-themes-treemacs-theme "doom-colors")
-  (doom-themes-treemacs-config))
+  (doom-themes-treemacs-config)
+  (doom-themes-org-config))
 
 ;; Doom-Modeline
 ;; (use-package doom-modeline
@@ -426,11 +428,15 @@
 ;; Rust
 (use-package rust-mode)
 
-;; C/C++
+;; C++
 (add-to-list 'eglot-server-programs
-	     '((c++-mode c-mode) "clangd"))
-(add-hook 'c-mode-hook 'eglot-ensure)
+	     '((c++-mode) "clangd"))
 (add-hook 'c++-mode-hook 'eglot-ensure)
+
+;; C
+(add-to-list 'eglot-server-programs
+             '((c-mode) "ccls"))
+(add-hook 'c-mode-hook 'eglot-ensure)
 
 ;; Javascript/Typescript
 ;; (use-package tide
