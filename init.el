@@ -140,7 +140,7 @@
         doom-city-lights-brighter-comments t
         doom-city-lights-comment-bg nil)
 ;;  (setq doom-dracula-brighter-modeline t)
-  (load-theme 'doom-dracula)
+  (load-theme 'doom-one-light)
   :config
   (setq doom-themes-treemacs-theme "doom-colors")
   (doom-themes-treemacs-config)
@@ -190,6 +190,17 @@
   (vertico-cycle t)
   :init
   (vertico-mode))
+
+(when (display-graphic-p)
+  (use-package vertico-posframe
+    :after vertico
+    :init
+    (vertico-posframe-mode 1)
+    :config
+    (setq vertico-posframe-parameters
+          '((left-fringe . 8)
+            (right-fringe . 8)))
+    ))
 
 (use-package orderless
   :init
