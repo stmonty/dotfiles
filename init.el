@@ -148,14 +148,19 @@
 
 ;; Doom-Modeline
 ;; (use-package doom-modeline
-;;   :ensure t
-;;   :init (doom-modeline-mode 1))
+;;   :init
+;;   (doom-modeline-mode 1))
 
 ;; Moody Modeline
-(use-package moody
-    :config
-    (moody-replace-mode-line-buffer-identification)
-    (moody-replace-vc-mode))
+;; (use-package moody
+;;     :config
+;;     (moody-replace-mode-line-buffer-identification)
+;;     (moody-replace-vc-mode))
+
+;; Mood-line
+(use-package mood-line
+  :init
+  (mood-line-mode))
 
 ;; Minions - To control minor modes in modeline
 (use-package minions
