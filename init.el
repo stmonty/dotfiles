@@ -139,12 +139,20 @@
   (setq doom-city-lights-brighter-modeline t
         doom-city-lights-brighter-comments t
         doom-city-lights-comment-bg nil)
-;;  (setq doom-dracula-brighter-modeline t)
+;;  (setq doom-one-light-brighter-modeline t)
   (load-theme 'doom-one-light)
   :config
   (setq doom-themes-treemacs-theme "doom-colors")
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
+
+(defun stm/toggle-theme ()
+  (interactive)
+  (if (eq (car custom-enabled-themes) 'doom-one-light)
+      (load-theme 'doom-vibrant)
+    (load-theme 'doom-one-light)))
+
+(global-set-key (kbd "C-c t") #'stm/toggle-theme)
 
 ;; Doom-Modeline
 ;; (use-package doom-modeline
