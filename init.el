@@ -149,8 +149,10 @@
 (defun stm/toggle-theme ()
   (interactive)
   (if (eq (car custom-enabled-themes) 'doom-one-light)
-      (load-theme 'doom-vibrant)
-    (load-theme 'doom-one-light)))
+      (progn (disable-theme 'doom-one-light)
+             (load-theme 'doom-gruvbox))
+    (progn (disable-theme 'doom-gruvbox)
+           (load-theme 'doom-one-light))))
 
 (global-set-key (kbd "C-c t") #'stm/toggle-theme)
 
