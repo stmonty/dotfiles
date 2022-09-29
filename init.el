@@ -434,10 +434,12 @@
 
 ;; Ruby
 ;; gem install solargraph
-(add-hook 'ruby-mode-hook 'eglot-ensure)
-;; (use-package robe
-;;   :hook
-;;   (ruby-mode . robe-mode))
+(add-to-list 'eglot-server-programs
+             '((ruby-mode) "solargraph"))
+;;(add-hook 'ruby-mode-hook 'eglot-ensure)
+(use-package robe
+  :hook
+  (ruby-mode . robe-mode))
 
 ;; Common Lisp
 (use-package sly)
