@@ -139,7 +139,8 @@
   (setq doom-city-lights-brighter-modeline t
         doom-city-lights-brighter-comments t
         doom-city-lights-comment-bg nil)
-;;  (setq doom-one-light-brighter-modeline t)
+  ;;  (setq doom-one-light-brighter-modeline t)
+  (setq doom-gruvbox-dark-variant "hard")
   (load-theme 'doom-one-light)
   :config
   (setq doom-themes-treemacs-theme "doom-colors")
