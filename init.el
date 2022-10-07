@@ -66,7 +66,7 @@
 			    ))
 
 ;; Set font size
-(set-face-attribute 'default nil :height 120)
+(set-face-attribute 'default nil :height 130)
 
 
 (electric-pair-mode 1)
@@ -106,6 +106,9 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
+(set-face-attribute 'default nil :family "Iosevka")
+(set-face-attribute 'variable-pitch nil :family "Iosevka Aile")
+
 ;; Initialize package sources
 (require 'package)
 
@@ -136,52 +139,32 @@
 (use-package doom-themes
   :init
   (setq doom-vibrant-brighter-modeline t)
-  (setq doom-city-lights-brighter-modeline t
-        doom-city-lights-brighter-comments t
-        doom-city-lights-comment-bg nil)
-  ;;  (setq doom-one-light-brighter-modeline t)
   (setq doom-gruvbox-dark-variant "hard")
+  (setq doom-themes-enable-italic nil)
   (load-theme 'doom-one-light)
   :config
   (setq doom-themes-treemacs-theme "doom-colors")
-  (doom-themes-treemacs-config)
-  (doom-themes-org-config))
+  (doom-themes-treemacs-config))
 
 (defun stm/toggle-theme ()
   (interactive)
   (if (eq (car custom-enabled-themes) 'doom-one-light)
       (progn (disable-theme 'doom-one-light)
-             (load-theme 'doom-gruvbox))
-    (progn (disable-theme 'doom-gruvbox)
+             (load-theme 'doom-tomorrow-night))
+    (progn (disable-theme 'doom-tomorrow-night)
            (load-theme 'doom-one-light))))
 
 (global-set-key (kbd "C-c t") #'stm/toggle-theme)
-
-;; Doom-Modeline
-;; (use-package doom-modeline
-;;   :init
-;;   (doom-modeline-mode 1))
-
-;; Moody Modeline
-;; (use-package moody
-;;     :config
-;;     (moody-replace-mode-line-buffer-identification)
-;;     (moody-replace-vc-mode))
 
 ;; Mood-line
 (use-package mood-line
   :init
   (mood-line-mode))
 
-;; Minions - To control minor modes in modeline
-(use-package minions
-  :config
-  (minions-mode 1))
-
 ;; All The Icons
 ;; Make sure to run 'M-x all-the-icons-install-fonts'
 (use-package all-the-icons
-  :if (display-graphic-p))
+  :if window-system)
 
 (use-package all-the-icons-dired
   :after all-the-icons
@@ -304,15 +287,6 @@
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-;; Dashboard
-;; (use-package dashboard
-;;   :config
-;;   (dashboard-setup-startup-hook))
-
-;; (setf dashboard-projects-backend 'projectile
-;;       dashboard-items '((projects . 5) (recents . 5) (agenda . 5)
-;; 			(bookmarks . 5)))
-
 
 ;; Git Gutter
 ;; Credit to Ian Y.E Pan for these code snippets
@@ -413,8 +387,26 @@
   (org-mode . stm/org-setup)
   :config
   (setq org-ellipsis " ▾")
-  (stm/org-font-setup)
+;;  (stm/org-font-setup)
   )
+
+(use-package org-modern
+  :after org
+  :hook
+  (org-mode . org-modern-mode)
+  :config
+  (set-face-attribute 'org-modern-symbol nil :family "Iosevka")
+  (setq
+   ;; Edit settings
+   org-auto-align-tags nil
+   org-tags-column 0
+   org-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+
+   ;; Org styling, hide markup etc.
+   org-hide-emphasis-markers t
+   org-pretty-entities t))
 
 (use-package org-roam
   :custom
@@ -442,6 +434,10 @@
 
 ;; Eglot
 (use-package eglot)
+
+(use-package apheleia
+  :config
+  (apheleia-global-mode +1))
 
 ;; Ruby
 ;; gem install solargraph
@@ -479,12 +475,30 @@
              '((c-mode) "ccls"))
 (add-hook 'c-mode-hook 'eglot-ensure)
 
-;; Javascript/Typescript
+;; Web Development
 ;; (use-package tide
 ;;   :hook
 ;;   ((typescript-mode . tide-setup)
 ;;    (typescript-mode . tide-hl-identifier-mode)
 ;;    (before-save . tide-format-before-save)))
+(use-package web-mode
+  :config
+  (progn
+      (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.html"   . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.css"    . web-mode))
+      ;; this magic incantation fixes highlighting of jsx syntax in .js files
+      (setq web-mode-content-types-alist
+            '(("jsx" . "\\.js[x]?\\'"))))
+  )
+
+(use-package js2-mode)
+
+(use-package typescript-mode
+  :hook
+  (typescript-mode . eglot-ensure))
+
 
 ;; Scala
 (use-package scala-mode
@@ -495,11 +509,3 @@
 (use-package haskell-mode
   :hook
   (haskell-mode . eglot-ensure))
-
-;; Java
-
-;; Elixir
-;;(use-package elixir-mode)
-
-;; Crystal
-;;(use-package crystal-mode)
