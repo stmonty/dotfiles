@@ -498,7 +498,7 @@
 (use-package typescript-mode
   :hook
   (typescript-mode . eglot-ensure))
-
+(add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
 
 ;; Scala
 (use-package scala-mode
