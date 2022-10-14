@@ -435,9 +435,7 @@
 ;; Eglot
 (use-package eglot)
 
-(use-package apheleia
-  :config
-  (apheleia-global-mode +1))
+(use-package apheleia)
 
 ;; Ruby
 ;; gem install solargraph
@@ -509,3 +507,10 @@
 (use-package haskell-mode
   :hook
   (haskell-mode . eglot-ensure))
+
+;; Crystal
+(use-package crystal-mode
+  :interpreter
+  ("crystal" . crystal-mode)
+  :config
+  (add-to-list 'auto-mode-alist '("\\.cr$" . crystal-mode)))
