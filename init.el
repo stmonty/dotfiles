@@ -190,16 +190,28 @@
   :init
   (vertico-mode))
 
-(when (display-graphic-p)
-  (use-package vertico-posframe
-    :after vertico
-    :init
-    (vertico-posframe-mode 1)
-    :config
-    (setq vertico-posframe-parameters
-          '((left-fringe . 8)
-            (right-fringe . 8)))
-    ))
+;; (use-package vertico-buffer
+;;   :after vertico
+;;   :custom
+;;   (vertico-buffer-hide-prompt t)
+;;   :config
+;;   ;; put minibuffer at top -- this is the more natural place to be looking!
+;;   (setq vertico-buffer-display-action
+;;         '(display-buffer-in-side-window
+;;           (window-height . 13)
+;;           (side . top)))
+;;   (vertico-buffer-mode 1))
+
+;; (when (display-graphic-p)
+;;   (use-package vertico-posframe
+;;     :after vertico
+;;     :init
+;;     (vertico-posframe-mode 1)
+;;     :config
+;;     (setq vertico-posframe-parameters
+;;           '((left-fringe . 8)
+;;             (right-fringe . 8)))
+;;     ))
 
 (use-package orderless
   :init
@@ -312,10 +324,6 @@
 (use-package treemacs
   :bind ("C-c s" . treemacs))
 
-;; Dired
-(use-package dired-sidebar
-  :bind ("C-c S" . dired-sidebar-toggle-sidebar))
-
 ;; Centaur Tabs
 ;; (use-package centaur-tabs
 ;;   :init
@@ -328,13 +336,13 @@
 ;;   ("C-<prior>" . centaur-tabs-backward)
 ;;   ("C-<next>" . centaur-tabs-forward))
 
-
 ;; Dirvish
 (use-package dirvish
   :init
   (dirvish-override-dired-mode)
   :bind
-  ("C-c d" . dirvish))
+  ("C-c d" . dirvish)
+  ("C-c S" . dirvish-side))
 
 ;; Docker
 (use-package docker
@@ -350,6 +358,8 @@
   (setq dumb-jump-disable-obsolete-warnings t)
   (dumb-jump-mode))
 
+;; Undo
+(use-package vundo)
 
 ;; Org Mode and Roam
 (defun stm/org-setup ()
