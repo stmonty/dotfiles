@@ -45,7 +45,8 @@
 (dolist (mode '(org-mode-hook
 		term-mode-hook
 		shell-mode-hook
-		eshell-mode-hook))
+		eshell-mode-hook
+        treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 
@@ -140,18 +141,20 @@
   :init
   (setq doom-vibrant-brighter-modeline t)
   (setq doom-gruvbox-dark-variant "hard")
-  (setq doom-themes-enable-italic nil)
+  (setq doom-themes-enable-italic t)
+  (setq doom-themes-enable-bold t)
   (load-theme 'doom-one-light)
   :config
   (setq doom-themes-treemacs-theme "doom-colors")
+  (setq doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-config))
 
 (defun stm/toggle-theme ()
   (interactive)
   (if (eq (car custom-enabled-themes) 'doom-one-light)
       (progn (disable-theme 'doom-one-light)
-             (load-theme 'doom-tomorrow-night))
-    (progn (disable-theme 'doom-tomorrow-night)
+             (load-theme 'doom-one))
+    (progn (disable-theme 'doom-one)
            (load-theme 'doom-one-light))))
 
 (global-set-key (kbd "C-c t") #'stm/toggle-theme)
@@ -397,6 +400,7 @@
   (org-mode . stm/org-setup)
   :config
   (setq org-ellipsis " ▾")
+  (setq org-return-follows-link t)
 ;;  (stm/org-font-setup)
   )
 
@@ -416,7 +420,8 @@
 
    ;; Org styling, hide markup etc.
    org-hide-emphasis-markers t
-   org-pretty-entities t))
+   org-pretty-entities t
+   org-pretty-entities-include-sub-superscripts nil))
 
 (use-package org-roam
   :custom
@@ -524,3 +529,10 @@
   ("crystal" . crystal-mode)
   :config
   (add-to-list 'auto-mode-alist '("\\.cr$" . crystal-mode)))
+
+;; Golang
+(use-package go-mode)
+
+;; Zig
+(use-package zig-mode)
+
