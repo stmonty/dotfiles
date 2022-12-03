@@ -69,12 +69,11 @@
 ;; Set font size
 (set-face-attribute 'default nil :height 130)
 
+;; Compilation
+(global-set-key (kbd "C-c c") 'compile)
+(global-set-key (kbd "C-c x") 'shell-command)
 
 (electric-pair-mode 1)
-
-
-;; Make escape quit prompts
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 ;; Indenting
 (setq-default indent-tabs-mode nil)
@@ -108,7 +107,7 @@
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
 (set-face-attribute 'default nil :family "Iosevka")
-(set-face-attribute 'variable-pitch nil :family "Iosevka Aile")
+(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
 ;; Initialize package sources
 (require 'package)
@@ -143,7 +142,7 @@
   (setq doom-gruvbox-dark-variant "hard")
   (setq doom-themes-enable-italic t)
   (setq doom-themes-enable-bold t)
-  (load-theme 'doom-one-light)
+  (load-theme 'doom-tomorrow-day)
   :config
   (setq doom-themes-treemacs-theme "doom-colors")
   (setq doom-themes-treemacs-enable-variable-pitch nil)
@@ -151,11 +150,11 @@
 
 (defun stm/toggle-theme ()
   (interactive)
-  (if (eq (car custom-enabled-themes) 'doom-one-light)
-      (progn (disable-theme 'doom-one-light)
-             (load-theme 'doom-one))
-    (progn (disable-theme 'doom-one)
-           (load-theme 'doom-one-light))))
+  (if (eq (car custom-enabled-themes) 'doom-tomorrow-day)
+      (progn (disable-theme 'doom-tomorrow-day)
+             (load-theme 'doom-ir-black))
+    (progn (disable-theme 'doom-ir-black)
+           (load-theme 'doom-tomorrow-day))))
 
 (global-set-key (kbd "C-c t") #'stm/toggle-theme)
 
@@ -326,6 +325,10 @@
 ;; Treemacs
 (use-package treemacs
   :bind ("C-c s" . treemacs))
+
+;; Tab-Bar (Window workspaces)
+(setq tab-bar-show nil)
+(tab-bar-mode 1)
 
 ;; Centaur Tabs
 ;; (use-package centaur-tabs
@@ -535,4 +538,7 @@
 
 ;; Zig
 (use-package zig-mode)
+
+;; Lua
+(use-package lua-mode)
 
