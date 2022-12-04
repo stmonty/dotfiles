@@ -45,6 +45,7 @@
 (dolist (mode '(org-mode-hook
 		term-mode-hook
 		shell-mode-hook
+        vterm-mode-hook
 		eshell-mode-hook
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
@@ -366,6 +367,9 @@
 
 ;; Undo
 (use-package vundo)
+
+;; V-Term
+(use-package vterm)
 
 ;; Org Mode and Roam
 (defun stm/org-setup ()
