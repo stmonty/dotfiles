@@ -143,7 +143,7 @@
   (setq doom-gruvbox-dark-variant "hard")
   (setq doom-themes-enable-italic t)
   (setq doom-themes-enable-bold t)
-  (load-theme 'doom-tomorrow-day)
+  (load-theme 'doom-moonlight)
   :config
   (setq doom-themes-treemacs-theme "doom-colors")
   (setq doom-themes-treemacs-enable-variable-pitch nil)
@@ -153,8 +153,8 @@
   (interactive)
   (if (eq (car custom-enabled-themes) 'doom-tomorrow-day)
       (progn (disable-theme 'doom-tomorrow-day)
-             (load-theme 'doom-ir-black))
-    (progn (disable-theme 'doom-ir-black)
+             (load-theme 'doom-moonlight))
+    (progn (disable-theme 'doom-moonlight)
            (load-theme 'doom-tomorrow-day))))
 
 (global-set-key (kbd "C-c t") #'stm/toggle-theme)
@@ -254,6 +254,18 @@
                    #'completion--in-region)
                  args))))
 
+;; Dashboard
+(use-package dashboard
+  :config
+  (setq dashboard-center-content t)
+  (setq dashboard-startup-banner "~/.emacs.d/emacs-blackhole.png")
+  (setq dashboard-banner-logo-title "Enter the Void.")
+  (dashboard-setup-startup-hook))
+
+(setf dashboard-projects-backend 'projectile
+      dashboard-items '((projects . 5) (recents . 5) (agenda . 5)
+			(bookmarks . 5)))
+
 ;; Company
 (use-package company
   :bind (:map prog-mode-map
@@ -344,12 +356,12 @@
 ;;   ("C-<next>" . centaur-tabs-forward))
 
 ;; Dirvish
-(use-package dirvish
-  :init
-  (dirvish-override-dired-mode)
-  :bind
-  ("C-c d" . dirvish)
-  ("C-c S" . dirvish-side))
+;; (use-package dirvish
+;;   :init
+;;   (dirvish-override-dired-mode)
+;;   :bind
+;;   ("C-c d" . dirvish)
+;;   ("C-c S" . dirvish-side))
 
 ;; Docker
 (use-package docker
@@ -370,6 +382,12 @@
 
 ;; V-Term
 (use-package vterm)
+(use-package multi-vterm
+  :bind
+  ("C-c v" . multi-vterm)
+  :config
+  ;; dedicated terminal height of 30%
+  (setq multi-vterm-dedicated-window-height-percent 30))
 
 ;; Org Mode and Roam
 (defun stm/org-setup ()
