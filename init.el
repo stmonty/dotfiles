@@ -27,6 +27,9 @@
                '(tool-bar-lines . 0)
                '(menu-bar-lines . 0))))
 
+;; Set Transparency
+;; (set-frame-parameter (selected-frame) 'alpha '(95 95))
+;; (add-to-list 'default-frame-alist '(alpha 95 95))
 
 (menu-bar-mode -1)
 (setq ring-bell-function 'ignore)
@@ -45,8 +48,8 @@
 (dolist (mode '(org-mode-hook
 		term-mode-hook
 		shell-mode-hook
-        vterm-mode-hook
 		eshell-mode-hook
+        eat-mode-hook
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
@@ -115,7 +118,8 @@
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
-			 ("elpa" . "https://elpa.gnu.org/packages/")))
+			 ("elpa" . "https://elpa.gnu.org/packages/")
+             ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
 (package-initialize)
 (unless package-archive-contents
@@ -380,14 +384,13 @@
 ;; Undo
 (use-package vundo)
 
-;; V-Term
-(use-package vterm)
-(use-package multi-vterm
+;; Emacs-Eat
+(use-package eat
+  :hook
+  (eshell-mode . eat-eshell-mode)
+  (eshell-mode . eat-eshell-visual-command-mode)
   :bind
-  ("C-c v" . multi-vterm)
-  :config
-  ;; dedicated terminal height of 30%
-  (setq multi-vterm-dedicated-window-height-percent 30))
+  ("C-c v" . eat))
 
 ;; Org Mode and Roam
 (defun stm/org-setup ()

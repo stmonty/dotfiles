@@ -6,7 +6,7 @@ then
     echo "Replacing init.el"
     cp ./init.el ~/.emacs.d/
     cp ./macos.el ~/.emacs.d/
-    cp ./emacs-blackhole.png ~/.emacs.d/
+    cp ./misc/emacs-blackhole.png ~/.emacs.d/
     echo "Done! Enjoy Emacs"
 else
     echo ".emacs.d not found. Make sure Emacs is installed by running 'emacs'."
