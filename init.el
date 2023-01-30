@@ -147,19 +147,23 @@
   (setq doom-gruvbox-dark-variant "hard")
   (setq doom-themes-enable-italic t)
   (setq doom-themes-enable-bold t)
-  (load-theme 'doom-moonlight)
   :config
   (setq doom-themes-treemacs-theme "doom-colors")
   (setq doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-config))
 
+;; Ef-Themes
+(use-package ef-themes
+  :init
+  (load-theme 'ef-dark))
+
 (defun stm/toggle-theme ()
   (interactive)
-  (if (eq (car custom-enabled-themes) 'doom-tomorrow-day)
-      (progn (disable-theme 'doom-tomorrow-day)
-             (load-theme 'doom-moonlight))
-    (progn (disable-theme 'doom-moonlight)
-           (load-theme 'doom-tomorrow-day))))
+  (if (eq (car custom-enabled-themes) 'ef-light)
+      (progn (disable-theme 'ef-light)
+             (load-theme 'ef-dark))
+    (progn (disable-theme 'ef-dark)
+           (load-theme 'ef-light))))
 
 (global-set-key (kbd "C-c t") #'stm/toggle-theme)
 
@@ -184,11 +188,11 @@
   :config
   (rainbow-mode +1))
 
-(use-package highlight-indent-guides
-  :hook
-  (prog-mode . highlight-indent-guides-mode)
-  :config
-  (setq highlight-indent-guides-method 'character))
+;; (use-package highlight-indent-guides
+;;   :hook
+;;   (prog-mode . highlight-indent-guides-mode)
+;;   :config
+;;   (setq highlight-indent-guides-method 'character))
 
 ;; Completions
 (use-package vertico
@@ -263,7 +267,7 @@
   :config
   (setq dashboard-center-content t)
   (setq dashboard-startup-banner "~/.emacs.d/emacs-blackhole.png")
-  (setq dashboard-banner-logo-title "Enter the Void.")
+  (setq dashboard-banner-logo-title "~=Enter the Void=~")
   (dashboard-setup-startup-hook))
 
 (setf dashboard-projects-backend 'projectile
@@ -347,25 +351,20 @@
 (setq tab-bar-show nil)
 (tab-bar-mode 1)
 
-;; Centaur Tabs
-;; (use-package centaur-tabs
-;;   :init
-;;   (setq centaur-tabs-set-icons t)
-;;   (setq centaur-tabs-gray-out-icons 'buffer)
-;;   (setq centaur-tabs-set-bar 'left)
-;;   (setq centaur-tabs-style "bar")
-;;   (centaur-tabs-mode t)
-;;   :bind
-;;   ("C-<prior>" . centaur-tabs-backward)
-;;   ("C-<next>" . centaur-tabs-forward))
-
-;; Dirvish
-;; (use-package dirvish
-;;   :init
-;;   (dirvish-override-dired-mode)
-;;   :bind
-;;   ("C-c d" . dirvish)
-;;   ("C-c S" . dirvish-side))
+(use-package popper
+  :bind (("C-;"   . popper-toggle-latest)
+         ("M-;"   . popper-cycle)
+         ("C-M-;" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          compilation-mode
+          eshell-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1))
 
 ;; Docker
 (use-package docker
@@ -476,7 +475,9 @@
 ;; LSP + Languages
 
 ;; Eglot
-(use-package eglot)
+(use-package eglot
+  :custom
+  (setq eglot-connect-timeout 60))
 
 (use-package apheleia)
 
