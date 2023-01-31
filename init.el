@@ -152,17 +152,39 @@
   (setq doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-config))
 
-;; Modus-Themes -- Work in Progress
+;; Ef-Themes
+;; (use-package ef-themes)
+
 (use-package modus-themes
   :config
   (setq modus-themes-common-palette-overrides
-      `(
-        ;; From the section "Make the mode line borderless"
-        (border-mode-line-active unspecified)
-        (border-mode-line-inactive unspecified)
-        ,@modus-themes-preset-overrides-faint))
-  (load-theme 'modus-vivendi)
-  )
+        '((fringe unspecified)
+          (fg-line-number-active fg-main)
+          (fg-line-number-inactive "gray50")
+          (bg-line-number-active unspecified)
+          (bg-line-number-inactive unspecified)
+
+          (border-mode-line-active unspecified)
+          (border-mode-line-inactive unspecified)))
+
+  (setq modus-vivendi-palette-overrides
+        `(,@modus-themes-common-palette-overrides
+          ,@modus-themes-preset-overrides-faint))
+
+  (load-theme 'modus-vivendi))
+
+;; (use-package modus-themes
+;;   :config
+;;   (setq modus-themes-common-palette-overrides
+;;         '((fringe unspecified)
+;;           (border-mode-line-active unspecified)
+;;           (border-mode-line-inactive unspecified)))
+
+;;   (setq modus-vivendi-palette-overrides
+;;         `(,@modus-themes-common-palette-overrides
+;;           ,@modus-themes-preset-overrides-faint))
+
+;;   (load-theme 'modus-vivendi))
 
 (defun stm/toggle-theme ()
   (interactive)
