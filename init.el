@@ -152,10 +152,17 @@
   (setq doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-config))
 
-;; Ef-Themes
-(use-package ef-themes
-  :init
-  (load-theme 'ef-dark))
+;; Modus-Themes -- Work in Progress
+(use-package modus-themes
+  :config
+  (setq modus-themes-common-palette-overrides
+      `(
+        ;; From the section "Make the mode line borderless"
+        (border-mode-line-active unspecified)
+        (border-mode-line-inactive unspecified)
+        ,@modus-themes-preset-overrides-faint))
+  (load-theme 'modus-vivendi)
+  )
 
 (defun stm/toggle-theme ()
   (interactive)
@@ -165,7 +172,7 @@
     (progn (disable-theme 'ef-dark)
            (load-theme 'ef-light))))
 
-(global-set-key (kbd "C-c t") #'stm/toggle-theme)
+(global-set-key (kbd "C-c t") #'modus-themes-toggle)
 
 ;; Mood-line
 (use-package mood-line
@@ -502,7 +509,9 @@
 ;; Clojure
 (use-package clojure-mode)
 (use-package cider
-  :after clojure-mode)
+  :after clojure-mode
+  :hook
+  (clojure-mode . cider-mode))
 
 ;; Rust
 (use-package rust-mode)
@@ -541,6 +550,9 @@
   :hook
   (typescript-mode . eglot-ensure))
 (add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
+
+;; Yaml
+(use-package yaml-mode)
 
 ;; Scala
 (use-package scala-mode
