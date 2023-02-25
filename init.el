@@ -14,22 +14,22 @@
 (scroll-bar-mode -1) ;; Disable visible scrollbar
 (tool-bar-mode -1)   ;; Disable the toolbar
 (tooltip-mode -1)    ;; Disable the tooltips
-(setq default-frame-alist
-      (append (list
-	           '(min-height . 1)
-               '(height     . 45)
-	           '(min-width  . 1)
-               '(width      . 81)
-               '(vertical-scroll-bars . nil)
-               '(internal-border-width . 24)
-               '(left-fringe    . 1)
-               '(right-fringe   . 1)
-               '(tool-bar-lines . 0)
-               '(menu-bar-lines . 0))))
+;; (setq default-frame-alist
+;;       (append (list
+;; 	           '(min-height . 1)
+;;                '(height     . 45)
+;; 	           '(min-width  . 1)
+;;                '(width      . 81)
+;;                '(vertical-scroll-bars . nil)
+;;                '(internal-border-width . 24)
+;;                '(left-fringe    . 1)
+;;                '(right-fringe   . 1)
+;;                '(tool-bar-lines . 0)
+;;                '(menu-bar-lines . 0))))
 
 ;; Set Transparency
-;; (set-frame-parameter (selected-frame) 'alpha '(95 95))
-;; (add-to-list 'default-frame-alist '(alpha 95 95))
+(set-frame-parameter (selected-frame) 'alpha '(95 95))
+(add-to-list 'default-frame-alist '(alpha 95 95))
 
 (menu-bar-mode -1)
 (setq ring-bell-function 'ignore)
@@ -52,6 +52,8 @@
         eat-mode-hook
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+(setq-default cursor-type 'bar)
 
 
 ;; Custom variables
@@ -76,6 +78,8 @@
 ;; Compilation
 (global-set-key (kbd "C-c c") 'compile)
 (global-set-key (kbd "C-c x") 'shell-command)
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 (electric-pair-mode 1)
 
@@ -110,8 +114,9 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-(set-face-attribute 'default nil :family "Iosevka")
-(set-face-attribute 'variable-pitch nil :family "Iosevka")
+;;(set-face-attribute 'default nil :family "Iosevka")
+;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
+(set-face-attribute 'default nil :height 110)
 
 ;; Initialize package sources
 (require 'package)
@@ -171,20 +176,8 @@
         `(,@modus-themes-common-palette-overrides
           ,@modus-themes-preset-overrides-faint))
 
-  (load-theme 'modus-vivendi))
+  (load-theme 'modus-vivendi-tinted))
 
-;; (use-package modus-themes
-;;   :config
-;;   (setq modus-themes-common-palette-overrides
-;;         '((fringe unspecified)
-;;           (border-mode-line-active unspecified)
-;;           (border-mode-line-inactive unspecified)))
-
-;;   (setq modus-vivendi-palette-overrides
-;;         `(,@modus-themes-common-palette-overrides
-;;           ,@modus-themes-preset-overrides-faint))
-
-;;   (load-theme 'modus-vivendi))
 
 (defun stm/toggle-theme ()
   (interactive)
@@ -216,6 +209,13 @@
 (use-package rainbow-mode
   :config
   (rainbow-mode +1))
+
+;; Minimap
+;; (use-package minimap
+;;   :bind
+;;   ("C-c m" . minimap-mode)
+;;   :config
+;;   (setq minimap-window-location 'right))
 
 ;; (use-package highlight-indent-guides
 ;;   :hook
@@ -358,10 +358,13 @@
   :hook
   (prog-mode . git-gutter-mode)
   :config
-  (setq git-gutter:update-interval 0.02))
+  (setq git-gutter:update-interval 0.02)
+  (setq git-gutter:window-width 1)
   ;; Note that this is only to make git gutter work for Non-Doom themes
   ;; Comment this out and uncomment git-gutter-fringe for Doom-Themes
-  ;;(setq git-gutter:added-sign " "))
+  (setq git-gutter:added-sign " "
+        git-gutter:deleted-sign " "
+        git-gutter:modified-sign " "))
 
 (use-package git-gutter-fringe
   :config
@@ -420,6 +423,8 @@
   :bind
   ("C-c v" . eat))
 
+(use-package markdown-mode)
+
 ;; Org Mode and Roam
 (defun stm/org-setup ()
   (org-indent-mode)
@@ -457,6 +462,7 @@
   :config
   (setq org-ellipsis " ▾")
   (setq org-return-follows-link t)
+  (setq org-startup-truncated nil)
 ;;  (stm/org-font-setup)
   )
 
@@ -465,7 +471,7 @@
   :hook
   (org-mode . org-modern-mode)
   :config
-  (set-face-attribute 'org-modern-symbol nil :family "Iosevka")
+;;  (set-face-attribute 'org-modern-symbol nil :family "Iosevka")
   (setq
    ;; Edit settings
    org-auto-align-tags nil
@@ -500,6 +506,76 @@
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t))
+
+;; Paredit
+(use-package paredit
+  :hook
+  (lisp-mode . paredit-mode)
+  (scheme-mode . paredit-mode))
+
+;; Codeium (AI Completion)
+;; we recommend using use-package to organize your init.el
+;; (use-package codeium
+;;     ;; if you use straight
+;;     ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
+;;     ;; otherwise, make sure that the codeium.el file is on load-path
+;;     :load-path "~/.emacs.d/codeium.el"
+;;     :init
+;;     ;; use globally
+;;     (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+;;     ;; or on a hook
+;;     ;; (add-hook 'python-mode-hook
+;;     ;;     (lambda ()
+;;     ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
+
+;;     ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
+;;     ;; (add-hook 'python-mode-hook
+;;     ;;     (lambda ()
+;;     ;;         (setq-local completion-at-point-functions
+;;     ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
+;;     ;; an async company-backend is coming soon!
+
+;;     ;; codeium-completion-at-point is autoloaded, but you can
+;;     ;; optionally set a timer, which might speed up things as the
+;;     ;; codeium local language server takes ~0.2s to start up
+;;     ;; (add-hook 'emacs-startup-hook
+;;     ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+
+;;     ;; :defer t ;; lazy loading, if you want
+;;     :config
+;;     (setq use-dialog-box nil) ;; do not use popup boxes
+
+;;     ;; if you don't want to use customize to save the api-key
+;;     ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+
+;;     ;; get codeium status in the modeline
+;;     (setq codeium-mode-line-enable
+;;         (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+;;     (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+;;     ;; alternatively for a more extensive mode-line
+;;     ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
+
+;;     ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
+;;     (setq codeium-api-enabled
+;;         (lambda (api)
+;;             (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+;;     ;; you can also set a config for a single buffer like this:
+;;     ;; (add-hook 'python-mode-hook
+;;     ;;     (lambda ()
+;;     ;;         (setq-local codeium/editor_options/tab_size 4)))
+
+;;     ;; You can overwrite all the codeium configs!
+;;     ;; for example, we recommend limiting the string sent to codeium for better performance
+;;     (defun my-codeium/document/text ()
+;;         (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+;;     ;; if you change the text, you should also change the cursor_offset
+;;     ;; warning: this is measured by UTF-8 encoded bytes
+;;     (defun my-codeium/document/cursor_offset ()
+;;         (codeium-utf8-byte-length
+;;             (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+;;     (setq codeium/document/text 'my-codeium/document/text)
+;;     (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
+
 
 ;; LSP + Languages
 

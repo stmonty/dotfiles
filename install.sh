@@ -12,3 +12,12 @@ else
     echo ".emacs.d not found. Make sure Emacs is installed by running 'emacs'."
     echo "Aborting install..."
 fi
+
+if [ -d ~/roam/ ]
+then
+    echo "roam folder found!"
+
+else
+    echo "Making roam folder in home directory"
+    mkdir ~/roam/
+fi
