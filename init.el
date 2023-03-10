@@ -175,7 +175,7 @@
   (setq modus-vivendi-palette-overrides
         `(,@modus-themes-common-palette-overrides
           ,@modus-themes-preset-overrides-faint))
-
+  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi-tinted))
   (load-theme 'modus-vivendi-tinted))
 
 
@@ -577,19 +577,32 @@
 ;;     (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
 
 
+;; Documentation
+(use-package devdocs
+  :bind
+  ("C-h D" . devdocs-lookup))
+
 ;; LSP + Languages
 
 ;; Eglot
 (use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
+  ;; gem install solargraph
+  (add-to-list 'eglot-server-programs
+               '((ruby-mode) "solargraph"))
   :custom
   (setq eglot-connect-timeout 60))
 
-(use-package apheleia)
+;; Python
+(use-package python-mode
+  :hook
+  (python-mode . eglot-ensure))
+(use-package apheleia
+  :hook
+  (apheleia-mode . python-mode))
 
 ;; Ruby
-;; gem install solargraph
-(add-to-list 'eglot-server-programs
-             '((ruby-mode) "solargraph"))
 ;;(add-hook 'ruby-mode-hook 'eglot-ensure)
 (use-package robe
   :hook
@@ -612,7 +625,9 @@
   (clojure-mode . cider-mode))
 
 ;; Rust
-(use-package rust-mode)
+(use-package rust-mode
+  :hook
+  (rust-mode . eglot-ensure))
 
 ;; C++
 (add-to-list 'eglot-server-programs
