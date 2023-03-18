@@ -28,8 +28,8 @@
 ;;                '(menu-bar-lines . 0))))
 
 ;; Set Transparency
-(set-frame-parameter (selected-frame) 'alpha '(95 95))
-(add-to-list 'default-frame-alist '(alpha 95 95))
+;;(set-frame-parameter (selected-frame) 'alpha '(95 95))
+;;(add-to-list 'default-frame-alist '(alpha 95 95))
 
 (menu-bar-mode -1)
 (setq ring-bell-function 'ignore)
@@ -50,6 +50,7 @@
 		shell-mode-hook
 		eshell-mode-hook
         eat-mode-hook
+        devdocs-mode-hook
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
@@ -175,7 +176,7 @@
   (setq modus-vivendi-palette-overrides
         `(,@modus-themes-common-palette-overrides
           ,@modus-themes-preset-overrides-faint))
-  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi-tinted))
+  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi))
   (load-theme 'modus-vivendi-tinted))
 
 
@@ -197,11 +198,16 @@
 ;; All The Icons
 ;; Make sure to run 'M-x all-the-icons-install-fonts'
 (use-package all-the-icons
-  :if window-system)
+  :if window-system
+  :config
+  (unless (find-font (font-spec :name "all-the-icons"))
+    (all-the-icons-install-fonts t)))
 
 (use-package all-the-icons-dired
   :after all-the-icons
-  :hook (dired-mode . all-the-icons-dired-mode))
+  :hook (dired-mode . all-the-icons-dired-mode)
+  :config
+  (setq all-the-icons-dired-monochrome nil))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -315,6 +321,18 @@
   (setq company-selection-wrap-around t)
   (setq company-require-match 'never)
   (global-company-mode))
+
+(defun stm/company-backend-with-yas (backends)
+      (if (and (listp backends) (memq 'company-yasnippet backends))
+	  backends
+	(append (if (consp backends)
+		    backends
+		  (list backends))
+		'(:with company-yasnippet))))
+
+;; add yasnippet to all backends
+(setq company-backends
+      (mapcar #'stm/company-backend-with-yas company-backends))
 
 (use-package which-key
   :init
@@ -579,8 +597,18 @@
 
 ;; Documentation
 (use-package devdocs
+  :hook
+  (devdocs-mode . visual-line-mode)
   :bind
   ("C-h D" . devdocs-lookup))
+
+
+;; Yasnippet
+(use-package yasnippet
+  :init
+  (yas-global-mode 1))
+(use-package yasnippet-snippets
+  :after yasnippet)
 
 ;; LSP + Languages
 
@@ -683,6 +711,18 @@
   ("crystal" . crystal-mode)
   :config
   (add-to-list 'auto-mode-alist '("\\.cr$" . crystal-mode)))
+
+;; Julia
+(use-package julia-mode)
+
+(use-package julia-repl
+  :after julia-mode
+  :bind
+  (:map julia-mode-map
+        ("C-c C-e" . julia-repl-send-line)
+        ("C-c C-b" . julia-repl-send-buffer)
+        ("C-c C-r" . julia-repl-send-region))
+  )
 
 ;; Golang
 (use-package go-mode)
