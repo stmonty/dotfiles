@@ -74,7 +74,7 @@
 			    ))
 
 ;; Set font size
-(set-face-attribute 'default nil :height 130)
+(add-hook 'find-file-hook (lambda () (set-face-attribute 'default nil :height 130)))
 
 ;; Compilation
 (global-set-key (kbd "C-c c") 'compile)
@@ -149,14 +149,17 @@
 ;; Doom Themes
 (use-package doom-themes
   :init
-  (setq doom-vibrant-brighter-modeline t)
   (setq doom-gruvbox-dark-variant "hard")
   (setq doom-themes-enable-italic t)
   (setq doom-themes-enable-bold t)
   :config
+  (setq doom-vibrant-brighter-modeline t)
+  (setq doom-vibrant-brighter-comments t)
+  (setq doom-one-brighter-comments t)
   (setq doom-themes-treemacs-theme "doom-colors")
   (setq doom-themes-treemacs-enable-variable-pitch nil)
-  (doom-themes-treemacs-config))
+  (doom-themes-treemacs-config)
+  (load-theme 'doom-vibrant))
 
 ;; Ef-Themes
 ;; (use-package ef-themes)
@@ -176,19 +179,19 @@
   (setq modus-vivendi-palette-overrides
         `(,@modus-themes-common-palette-overrides
           ,@modus-themes-preset-overrides-faint))
-  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi))
-  (load-theme 'modus-vivendi-tinted))
+  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi)))
 
 
 (defun stm/toggle-theme ()
   (interactive)
-  (if (eq (car custom-enabled-themes) 'ef-light)
-      (progn (disable-theme 'ef-light)
-             (load-theme 'ef-dark))
-    (progn (disable-theme 'ef-dark)
-           (load-theme 'ef-light))))
+  (if (eq (car custom-enabled-themes) 'doom-vibrant)
+      (progn (disable-theme 'doom-vibrant)
+             (load-theme 'doom-one-light))
+    (progn (disable-theme 'doom-one-light)
+           (load-theme 'doom-vibrant))))
 
 (global-set-key (kbd "C-c t") #'modus-themes-toggle)
+(global-set-key (kbd "C-c T") #'stm/toggle-theme)
 
 ;; Mood-line
 (use-package mood-line
