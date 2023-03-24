@@ -76,10 +76,6 @@
 ;; Set font size
 (add-hook 'find-file-hook (lambda () (set-face-attribute 'default nil :height 130)))
 
-;; Compilation
-(global-set-key (kbd "C-c c") 'compile)
-(global-set-key (kbd "C-c x") 'shell-command)
-
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
 (electric-pair-mode 1)
