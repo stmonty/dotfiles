@@ -50,6 +50,7 @@
 		shell-mode-hook
 		eshell-mode-hook
         eat-mode-hook
+        eww-mode-hook
         devdocs-mode-hook
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
@@ -74,6 +75,7 @@
 			    ))
 
 ;; Set font size
+(set-face-attribute 'default nil :height 130)
 (add-hook 'find-file-hook (lambda () (set-face-attribute 'default nil :height 130)))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -113,7 +115,6 @@
 
 ;;(set-face-attribute 'default nil :family "Iosevka")
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
-(set-face-attribute 'default nil :height 110)
 
 ;; Initialize package sources
 (require 'package)
@@ -154,8 +155,7 @@
   (setq doom-one-brighter-comments t)
   (setq doom-themes-treemacs-theme "doom-colors")
   (setq doom-themes-treemacs-enable-variable-pitch nil)
-  (doom-themes-treemacs-config)
-  (load-theme 'doom-vibrant))
+  (doom-themes-treemacs-config))
 
 ;; Ef-Themes
 ;; (use-package ef-themes)
@@ -175,23 +175,24 @@
   (setq modus-vivendi-palette-overrides
         `(,@modus-themes-common-palette-overrides
           ,@modus-themes-preset-overrides-faint))
-  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi)))
+  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi))
+  (load-theme 'modus-vivendi-tinted))
 
 
 (defun stm/toggle-theme ()
   (interactive)
   (if (eq (car custom-enabled-themes) 'doom-vibrant)
       (progn (disable-theme 'doom-vibrant)
-             (load-theme 'doom-one-light))
-    (progn (disable-theme 'doom-one-light)
+             (load-theme 'doom-acario-light))
+    (progn (disable-theme 'doom-acario-light)
            (load-theme 'doom-vibrant))))
 
 (global-set-key (kbd "C-c t") #'modus-themes-toggle)
-(global-set-key (kbd "C-c T") #'stm/toggle-theme)
+(global-set-key (kbd "C-c y") #'stm/toggle-theme)
 
 ;; Mood-line
 (use-package mood-line
-  :init
+  :config
   (mood-line-mode))
 
 ;; All The Icons
@@ -285,7 +286,6 @@
   ("M-s r" . consult-ripgrep)
   ("M-s l" . consult-line)
   ("M-s L" . consult-line-multi)
-  ("M-s m" . consult-multi-occur)
   ("M-s k" . consult-keep-lines)
   ("M-s u" . consult-focus-lines) 
   :config
@@ -612,20 +612,33 @@
 
 ;; LSP + Languages
 
+(defun stm/toggle-eglot ()
+  "Toggle Eglot on and off."
+  (interactive)
+  (if (eglot-managed-p)
+      (call-interactively 'eglot-shutdown)
+    (call-interactively 'eglot)))
+
 ;; Eglot
 (use-package eglot
+  :bind
+  ("C-c i" . 'stm/toggle-eglot)
   :config
   (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
   ;; gem install solargraph
   (add-to-list 'eglot-server-programs
                '((ruby-mode) "solargraph"))
-  :custom
-  (setq eglot-connect-timeout 60))
+  (add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
+  (setq eglot-connect-timeout 60)
+  ;;  (setq eglot-ignored-server-capabilities '(:hoverProvider))
+  )
+
+(add-hook 'eglot-managed-mode-hook 
+          (lambda () (setq eldoc-documentation-strategy 
+                           #'eldoc-documentation-compose)))
 
 ;; Python
-(use-package python-mode
-  :hook
-  (python-mode . eglot-ensure))
+(use-package python-mode)
 (use-package apheleia
   :hook
   (apheleia-mode . python-mode))
@@ -653,19 +666,17 @@
   (clojure-mode . cider-mode))
 
 ;; Rust
-(use-package rust-mode
-  :hook
-  (rust-mode . eglot-ensure))
+(use-package rust-mode)
 
 ;; C++
 (add-to-list 'eglot-server-programs
 	     '((c++-mode) "clangd"))
-(add-hook 'c++-mode-hook 'eglot-ensure)
+;;(add-hook 'c++-mode-hook 'eglot-ensure)
 
 ;; C
 (add-to-list 'eglot-server-programs
              '((c-mode) "ccls"))
-(add-hook 'c-mode-hook 'eglot-ensure)
+;;(add-hook 'c-mode-hook 'eglot-ensure)
 
 ;; Web Development
 ;; (use-package tide
@@ -687,10 +698,7 @@
 
 (use-package js2-mode)
 
-(use-package typescript-mode
-  :hook
-  (typescript-mode . eglot-ensure))
-(add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
+(use-package typescript-mode)
 
 ;; Yaml
 (use-package yaml-mode)
@@ -701,9 +709,7 @@
   ("scala" . scala-mode))
 
 ;; Haskell
-(use-package haskell-mode
-  :hook
-  (haskell-mode . eglot-ensure))
+(use-package haskell-mode)
 
 ;; Crystal
 (use-package crystal-mode
