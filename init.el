@@ -55,7 +55,8 @@
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-(setq-default cursor-type 'bar)
+
+;; (setq-default cursor-type 'bar)
 
 
 ;; Custom variables
@@ -145,14 +146,14 @@
 
 ;; Doom Themes
 (use-package doom-themes
-  :init
-  (setq doom-gruvbox-dark-variant "hard")
+  :config
   (setq doom-themes-enable-italic t)
   (setq doom-themes-enable-bold t)
-  :config
   (setq doom-vibrant-brighter-modeline t)
   (setq doom-vibrant-brighter-comments t)
   (setq doom-one-brighter-comments t)
+  (setq doom-oceanic-next-brighter-comments t)
+  (setq doom-oceanic-next-brighter-modeline t)
   (setq doom-themes-treemacs-theme "doom-colors")
   (setq doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-config))
@@ -181,11 +182,11 @@
 
 (defun stm/toggle-theme ()
   (interactive)
-  (if (eq (car custom-enabled-themes) 'doom-vibrant)
-      (progn (disable-theme 'doom-vibrant)
-             (load-theme 'doom-acario-light))
-    (progn (disable-theme 'doom-acario-light)
-           (load-theme 'doom-vibrant))))
+  (if (eq (car custom-enabled-themes) 'tango-dark)
+      (progn (disable-theme 'tango-dark)
+             (load-theme 'tango))
+    (progn (disable-theme 'tango)
+           (load-theme 'tango-dark))))
 
 (global-set-key (kbd "C-c t") #'modus-themes-toggle)
 (global-set-key (kbd "C-c y") #'stm/toggle-theme)
@@ -194,6 +195,17 @@
 (use-package mood-line
   :config
   (mood-line-mode))
+
+;;(use-package telephone-line
+;;  :config
+;;  (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+;;        telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+;;        telephone-line-primary-right-separator 'telephone-line-cubed-right
+;;        telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+;;  (setq telephone-line-primary-right-separator 'telephone-line-abs-left
+;;        telephone-line-secondary-right-separator 'telephone-line-abs-hollow-left)
+;;  (setq telephone-line-height 20)
+;;  (telephone-line-mode 1))
 
 ;; All The Icons
 ;; Make sure to run 'M-x all-the-icons-install-fonts'
@@ -235,18 +247,6 @@
   (vertico-cycle t)
   :init
   (vertico-mode))
-
-;; (use-package vertico-buffer
-;;   :after vertico
-;;   :custom
-;;   (vertico-buffer-hide-prompt t)
-;;   :config
-;;   ;; put minibuffer at top -- this is the more natural place to be looking!
-;;   (setq vertico-buffer-display-action
-;;         '(display-buffer-in-side-window
-;;           (window-height . 13)
-;;           (side . top)))
-;;   (vertico-buffer-mode 1))
 
 ;; (when (display-graphic-p)
 ;;   (use-package vertico-posframe
@@ -400,6 +400,97 @@
 (setq tab-bar-show nil)
 (tab-bar-mode 1)
 
+(defun meow-setup ()
+  (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+  (meow-motion-overwrite-define-key
+   '("j" . meow-next)
+   '("k" . meow-prev)
+   '("<escape>" . ignore))
+  (meow-leader-define-key
+   ;; SPC j/k will run the original command in MOTION state.
+   '("j" . "H-j")
+   '("k" . "H-k")
+   ;; Use SPC (0-9) for digit arguments.
+   '("1" . meow-digit-argument)
+   '("2" . meow-digit-argument)
+   '("3" . meow-digit-argument)
+   '("4" . meow-digit-argument)
+   '("5" . meow-digit-argument)
+   '("6" . meow-digit-argument)
+   '("7" . meow-digit-argument)
+   '("8" . meow-digit-argument)
+   '("9" . meow-digit-argument)
+   '("0" . meow-digit-argument)
+   '("/" . meow-keypad-describe-key)
+   '("?" . meow-cheatsheet))
+  (meow-normal-define-key
+   '("0" . meow-expand-0)
+   '("9" . meow-expand-9)
+   '("8" . meow-expand-8)
+   '("7" . meow-expand-7)
+   '("6" . meow-expand-6)
+   '("5" . meow-expand-5)
+   '("4" . meow-expand-4)
+   '("3" . meow-expand-3)
+   '("2" . meow-expand-2)
+   '("1" . meow-expand-1)
+   '("-" . negative-argument)
+   '(";" . meow-reverse)
+   '("," . meow-inner-of-thing)
+   '("." . meow-bounds-of-thing)
+   '("[" . meow-beginning-of-thing)
+   '("]" . meow-end-of-thing)
+   '("a" . meow-append)
+   '("A" . meow-open-below)
+   '("b" . meow-back-word)
+   '("B" . meow-back-symbol)
+   '("c" . meow-change)
+   '("d" . meow-delete)
+   '("D" . meow-backward-delete)
+   '("e" . meow-next-word)
+   '("E" . meow-next-symbol)
+   '("f" . meow-find)
+   '("g" . meow-cancel-selection)
+   '("G" . meow-grab)
+   '("h" . meow-left)
+   '("H" . meow-left-expand)
+   '("i" . meow-insert)
+   '("I" . meow-open-above)
+   '("j" . meow-next)
+   '("J" . meow-next-expand)
+   '("k" . meow-prev)
+   '("K" . meow-prev-expand)
+   '("l" . meow-right)
+   '("L" . meow-right-expand)
+   '("m" . meow-join)
+   '("n" . meow-search)
+   '("o" . meow-block)
+   '("O" . meow-to-block)
+   '("p" . meow-yank)
+   '("q" . meow-quit)
+   '("Q" . meow-goto-line)
+   '("r" . meow-replace)
+   '("R" . meow-swap-grab)
+   '("s" . meow-kill)
+   '("t" . meow-till)
+   '("u" . meow-undo)
+   '("U" . meow-undo-in-selection)
+   '("v" . meow-visit)
+   '("w" . meow-mark-word)
+   '("W" . meow-mark-symbol)
+   '("x" . meow-line)
+   '("X" . meow-goto-line)
+   '("y" . meow-save)
+   '("Y" . meow-sync-grab)
+   '("z" . meow-pop-selection)
+   '("'" . repeat)
+   '("<escape>" . ignore)))
+
+(use-package meow
+  :config
+  (meow-setup)
+  (meow-global-mode 1))
+
 (use-package popper
   :bind (("C-;"   . popper-toggle-latest)
          ("M-;"   . popper-cycle)
@@ -431,15 +522,15 @@
   (dumb-jump-mode))
 
 ;; Undo
-(use-package vundo)
+(use-package vundo
+  :bind
+  ("C-c v" . vundo))
 
 ;; Emacs-Eat
 (use-package eat
   :hook
   (eshell-mode . eat-eshell-mode)
-  (eshell-mode . eat-eshell-visual-command-mode)
-  :bind
-  ("C-c v" . eat))
+  (eshell-mode . eat-eshell-visual-command-mode))
 
 (use-package markdown-mode)
 
@@ -531,70 +622,6 @@
   (lisp-mode . paredit-mode)
   (scheme-mode . paredit-mode))
 
-;; Codeium (AI Completion)
-;; we recommend using use-package to organize your init.el
-;; (use-package codeium
-;;     ;; if you use straight
-;;     ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
-;;     ;; otherwise, make sure that the codeium.el file is on load-path
-;;     :load-path "~/.emacs.d/codeium.el"
-;;     :init
-;;     ;; use globally
-;;     (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
-;;     ;; or on a hook
-;;     ;; (add-hook 'python-mode-hook
-;;     ;;     (lambda ()
-;;     ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
-
-;;     ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
-;;     ;; (add-hook 'python-mode-hook
-;;     ;;     (lambda ()
-;;     ;;         (setq-local completion-at-point-functions
-;;     ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
-;;     ;; an async company-backend is coming soon!
-
-;;     ;; codeium-completion-at-point is autoloaded, but you can
-;;     ;; optionally set a timer, which might speed up things as the
-;;     ;; codeium local language server takes ~0.2s to start up
-;;     ;; (add-hook 'emacs-startup-hook
-;;     ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
-
-;;     ;; :defer t ;; lazy loading, if you want
-;;     :config
-;;     (setq use-dialog-box nil) ;; do not use popup boxes
-
-;;     ;; if you don't want to use customize to save the api-key
-;;     ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
-
-;;     ;; get codeium status in the modeline
-;;     (setq codeium-mode-line-enable
-;;         (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
-;;     (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
-;;     ;; alternatively for a more extensive mode-line
-;;     ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
-
-;;     ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
-;;     (setq codeium-api-enabled
-;;         (lambda (api)
-;;             (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
-;;     ;; you can also set a config for a single buffer like this:
-;;     ;; (add-hook 'python-mode-hook
-;;     ;;     (lambda ()
-;;     ;;         (setq-local codeium/editor_options/tab_size 4)))
-
-;;     ;; You can overwrite all the codeium configs!
-;;     ;; for example, we recommend limiting the string sent to codeium for better performance
-;;     (defun my-codeium/document/text ()
-;;         (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
-;;     ;; if you change the text, you should also change the cursor_offset
-;;     ;; warning: this is measured by UTF-8 encoded bytes
-;;     (defun my-codeium/document/cursor_offset ()
-;;         (codeium-utf8-byte-length
-;;             (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
-;;     (setq codeium/document/text 'my-codeium/document/text)
-;;     (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
-
-
 ;; Documentation
 (use-package devdocs
   :hook
@@ -602,13 +629,22 @@
   :bind
   ("C-h D" . devdocs-lookup))
 
-
 ;; Yasnippet
 (use-package yasnippet
   :init
   (yas-global-mode 1))
 (use-package yasnippet-snippets
   :after yasnippet)
+
+;; Sideline
+;; (use-package sideline-flymake)
+;; (use-package sideline
+;;   :hook (flymake-mode . sideline-mode)
+;;   :init
+;;   (setq sideline-flymake-display-mode 'line)
+;;   (setq sideline-backends-right '(sideline-flymake)
+;;         sideline-priority 100
+;;         sideline-display-backend-name t))
 
 ;; LSP + Languages
 
