@@ -36,6 +36,7 @@
 
 (column-number-mode)
 (global-display-line-numbers-mode t)
+(global-visual-line-mode 1)
 
 (setq auto-save-default nil)
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
@@ -76,8 +77,8 @@
 			    ))
 
 ;; Set font size
-(set-face-attribute 'default nil :height 130)
-(add-hook 'find-file-hook (lambda () (set-face-attribute 'default nil :height 130)))
+(set-face-attribute 'default nil :height 120)
+(add-hook 'find-file-hook (lambda () (set-face-attribute 'default nil :height 120)))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
@@ -144,22 +145,10 @@
 (use-package exec-path-from-shell)
 (exec-path-from-shell-initialize)
 
-;; Doom Themes
-(use-package doom-themes
-  :config
-  (setq doom-themes-enable-italic t)
-  (setq doom-themes-enable-bold t)
-  (setq doom-vibrant-brighter-modeline t)
-  (setq doom-vibrant-brighter-comments t)
-  (setq doom-one-brighter-comments t)
-  (setq doom-oceanic-next-brighter-comments t)
-  (setq doom-oceanic-next-brighter-modeline t)
-  (setq doom-themes-treemacs-theme "doom-colors")
-  (setq doom-themes-treemacs-enable-variable-pitch nil)
-  (doom-themes-treemacs-config))
-
-;; Ef-Themes
-;; (use-package ef-themes)
+;; Expand-region
+(use-package expand-region
+  :bind
+  ("C-=" . er/expand-region))
 
 (use-package modus-themes
   :config
@@ -176,9 +165,13 @@
   (setq modus-vivendi-palette-overrides
         `(,@modus-themes-common-palette-overrides
           ,@modus-themes-preset-overrides-faint))
-  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi))
-  (load-theme 'modus-vivendi-tinted))
+  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi)))
 
+;; Ef-themes
+(use-package ef-themes
+  :config
+  (setq ef-themes-to-toggle '(ef-day ef-night))
+  (load-theme 'ef-night))
 
 (defun stm/toggle-theme ()
   (interactive)
@@ -188,8 +181,8 @@
     (progn (disable-theme 'tango)
            (load-theme 'tango-dark))))
 
-(global-set-key (kbd "C-c t") #'modus-themes-toggle)
-(global-set-key (kbd "C-c y") #'stm/toggle-theme)
+(global-set-key (kbd "C-c t") #'ef-themes-toggle)
+;;(global-set-key (kbd "C-c t") #'stm/toggle-theme)
 
 ;; Mood-line
 (use-package mood-line
@@ -202,9 +195,9 @@
 ;;        telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
 ;;        telephone-line-primary-right-separator 'telephone-line-cubed-right
 ;;        telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
-;;  (setq telephone-line-primary-right-separator 'telephone-line-abs-left
-;;        telephone-line-secondary-right-separator 'telephone-line-abs-hollow-left)
-;;  (setq telephone-line-height 20)
+;;
+;;  (setq telephone-line-height 24
+;;        telephone-line-evil-use-short-tag t)
 ;;  (telephone-line-mode 1))
 
 ;; All The Icons
@@ -227,13 +220,6 @@
 (use-package rainbow-mode
   :config
   (rainbow-mode +1))
-
-;; Minimap
-;; (use-package minimap
-;;   :bind
-;;   ("C-c m" . minimap-mode)
-;;   :config
-;;   (setq minimap-window-location 'right))
 
 ;; (use-package highlight-indent-guides
 ;;   :hook
@@ -304,7 +290,7 @@
   (setq dashboard-banner-logo-title "~=Enter the Void=~")
   (dashboard-setup-startup-hook))
 
-(setf dashboard-projects-backend 'projectile
+(setf dashboard-projects-backend 'project-el
       dashboard-items '((projects . 5) (recents . 5) (agenda . 5)
 			(bookmarks . 5)))
 
@@ -338,7 +324,7 @@
   (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.2))
+  (setq which-key-idle-delay 2.0))
 
 (use-package all-the-icons-completion
   :after (all-the-icons marginalia)
@@ -349,16 +335,16 @@
 
 
 ;; Projectile
-(use-package projectile
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :custom ((projectile-completion-system 'default))
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
-  :init
-  (when (file-directory-p "~/repos")
-    (setq projectile-project-search-path '("~/repos")))
-  (setq projectile-switch-project-action #'projectile-dired))
+;;(use-package projectile
+;;  :diminish projectile-mode
+;;  :config (projectile-mode)
+;;  :custom ((projectile-completion-system 'default))
+;;  :bind (:map projectile-mode-map
+;;  ("C-c p" . projectile-command-map))
+;;  :init
+;;  (when (file-directory-p "~/repos")
+;;    (setq projectile-project-search-path '("~/repos")))
+;;  (setq projectile-switch-project-action #'projectile-dired))
 
 ;; Magit
 (use-package magit
@@ -367,38 +353,6 @@
   :commands magit-status
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-
-
-;; Git Gutter
-;; Credit to Ian Y.E Pan for these code snippets
-(use-package git-gutter
-  :hook
-  (prog-mode . git-gutter-mode)
-  :config
-  (setq git-gutter:update-interval 0.02)
-  (setq git-gutter:window-width 1)
-  ;; Note that this is only to make git gutter work for Non-Doom themes
-  ;; Comment this out and uncomment git-gutter-fringe for Doom-Themes
-  (setq git-gutter:added-sign " "
-        git-gutter:deleted-sign " "
-        git-gutter:modified-sign " "))
-
-(use-package git-gutter-fringe
-  :config
-  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil
-    '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil
-    '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil
-    'bottom))
-
-;; Treemacs
-(use-package treemacs
-  :bind ("C-c s" . treemacs))
-
-;; Tab-Bar (Window workspaces)
-(setq tab-bar-show nil)
-(tab-bar-mode 1)
 
 (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
@@ -489,7 +443,45 @@
 (use-package meow
   :config
   (meow-setup)
+  (setq meow-keypad-describe-keymap-function nil)
+  (setq meow-keypad-leader-dispatch "C-c")
   (meow-global-mode 1))
+
+;; Git Gutter
+;; Credit to Ian Y.E Pan for these code snippets
+(use-package git-gutter
+  :hook
+  (prog-mode . git-gutter-mode)
+  :config
+  (setq git-gutter:update-interval 0.02)
+  (setq git-gutter:window-width 1)
+  ;; Note that this is only to make git gutter work for Non-Doom themes
+  ;; Comment this out and uncomment git-gutter-fringe for Doom-Themes
+  ;; (setq git-gutter:added-sign " "
+  ;;       git-gutter:deleted-sign " "
+  ;;       git-gutter:modified-sign " ")
+  )
+
+(use-package git-gutter-fringe
+  :config
+  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil
+    '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil
+    '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil
+    'bottom))
+
+;; Treemacs
+(use-package treemacs
+  :bind ("C-c s" . treemacs))
+
+(use-package treemacs-all-the-icons
+  :config
+  (treemacs-load-theme "all-the-icons"))
+
+;; Tab-Bar (Window workspaces)
+(setq tab-bar-show nil)
+(tab-bar-mode 1)
 
 (use-package popper
   :bind (("C-;"   . popper-toggle-latest)
@@ -525,12 +517,6 @@
 (use-package vundo
   :bind
   ("C-c v" . vundo))
-
-;; Emacs-Eat
-(use-package eat
-  :hook
-  (eshell-mode . eat-eshell-mode)
-  (eshell-mode . eat-eshell-visual-command-mode))
 
 (use-package markdown-mode)
 
@@ -669,9 +655,22 @@
   ;;  (setq eglot-ignored-server-capabilities '(:hoverProvider))
   )
 
-(add-hook 'eglot-managed-mode-hook 
-          (lambda () (setq eldoc-documentation-strategy 
-                           #'eldoc-documentation-compose)))
+;;(add-hook 'eglot-managed-mode-hook 
+;;        ;;(lambda () (setq eldoc-documentation-strategy 
+;;                         ;;#'eldoc-documentation-compose)))
+
+;;(use-package eldoc-box
+;;  :config
+;;  (setq eldoc-box-max-pixel-height 300
+;;        eldoc-box-max-pixel-width  400))
+;;
+;;(add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t)
+;;
+;;(defun my-eldoc-box-setup ()
+;;  (set-face-attribute 'eldoc-box-body nil :font (face-attribute 'default :font)))
+;;
+;;(add-hook 'eldoc-box-hover-mode-hook 'my-eldoc-box-setup)
+
 
 ;; Python
 (use-package python-mode)
