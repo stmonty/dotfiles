@@ -59,7 +59,6 @@
 
 ;; (setq-default cursor-type 'bar)
 
-
 ;; Custom variables
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (when (file-exists-p custom-file)
@@ -170,8 +169,16 @@
 ;; Ef-themes
 (use-package ef-themes
   :config
-  (setq ef-themes-to-toggle '(ef-day ef-night))
-  (load-theme 'ef-night))
+  (setq ef-themes-to-toggle '(ef-cyprus ef-night)))
+
+(use-package catppuccin-theme
+  :config
+  (load-theme 'catppuccin)
+  (setq catppuccin-italic-comments t)
+  (setq catppuccin-flavor 'mocha)
+  (catppuccin-set-color 'surface2  "#6d77bf" 'mocha)
+;;  (catppuccin-set-color 'surface2  "#a8b3ff" 'mocha)
+  (catppuccin-reload))
 
 (defun stm/toggle-theme ()
   (interactive)
@@ -292,7 +299,14 @@
 
 (setf dashboard-projects-backend 'project-el
       dashboard-items '((projects . 5) (recents . 5) (agenda . 5)
-			(bookmarks . 5)))
+			            (bookmarks . 5)))
+
+;; Yasnippet
+(use-package yasnippet
+  :init
+  (yas-global-mode 1))
+(use-package yasnippet-snippets
+  :after yasnippet)
 
 ;; Company
 (use-package company
@@ -335,7 +349,7 @@
 
 
 ;; Projectile
-;;(use-package projectile
+;; (use-package projectile
 ;;  :diminish projectile-mode
 ;;  :config (projectile-mode)
 ;;  :custom ((projectile-completion-system 'default))
@@ -483,6 +497,43 @@
 (setq tab-bar-show nil)
 (tab-bar-mode 1)
 
+
+;; Eshell
+(setq eshell-banner-message "
+  Welcome to the Emacs
+
+                         _/                  _/  _/
+      _/_/      _/_/_/  _/_/_/      _/_/    _/  _/
+   _/_/_/_/  _/_/      _/    _/  _/_/_/_/  _/  _/
+  _/            _/_/  _/    _/  _/        _/  _/
+   _/_/_/  _/_/_/    _/    _/    _/_/_/  _/  _/
+
+")
+
+;; Matrix + IRC
+(use-package ement)
+
+;; RSS
+(use-package elfeed
+  :config
+  (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
+        elfeed-show-entry-switch 'display-buffer)
+  (setq elfeed-feeds
+        '(("https://drewdevault.com/blog/index.xml" tech foss)
+          ("https://thephd.dev/feed.xml" tech c++)
+          ("https://takeonrules.com/feed.xml" tech)
+          ("https://www.rousette.org.uk/index.xml" tech emacs)
+          ("https://lepisma.xyz/atom.xml" tech emacs)
+          ("https://karthinks.com/index.xml" tech emacs)
+          ("https://unixsheikh.com/feed.rss" tech unix foss)
+          ("https://sizeof.cat/index.xml" tech security)
+          ("https://inconvergent.net/atom.xml" tech art lisp)
+          ("https://chollinger.com/blog/index.xml" tech)
+          ("https://nullprogram.com/feed/" tech c)
+          ("https://two-wrongs.com/feed" tech math)))
+  :bind
+  ("C-x w" . elfeed))
+
 (use-package popper
   :bind (("C-;"   . popper-toggle-latest)
          ("M-;"   . popper-cycle)
@@ -615,12 +666,6 @@
   :bind
   ("C-h D" . devdocs-lookup))
 
-;; Yasnippet
-(use-package yasnippet
-  :init
-  (yas-global-mode 1))
-(use-package yasnippet-snippets
-  :after yasnippet)
 
 ;; Sideline
 ;; (use-package sideline-flymake)
@@ -629,8 +674,7 @@
 ;;   :init
 ;;   (setq sideline-flymake-display-mode 'line)
 ;;   (setq sideline-backends-right '(sideline-flymake)
-;;         sideline-priority 100
-;;         sideline-display-backend-name t))
+;;         sideline-priority 100))
 
 ;; LSP + Languages
 
@@ -655,9 +699,9 @@
   ;;  (setq eglot-ignored-server-capabilities '(:hoverProvider))
   )
 
-;;(add-hook 'eglot-managed-mode-hook 
-;;        ;;(lambda () (setq eldoc-documentation-strategy 
-;;                         ;;#'eldoc-documentation-compose)))
+(add-hook 'eglot-managed-mode-hook 
+       (lambda () (setq eldoc-documentation-strategy 
+                        #'eldoc-documentation-compose)))
 
 ;;(use-package eldoc-box
 ;;  :config
@@ -703,10 +747,13 @@
 ;; Rust
 (use-package rust-mode)
 
-;; C++
+;; C++ (cpp)
 (add-to-list 'eglot-server-programs
 	     '((c++-mode) "clangd"))
 ;;(add-hook 'c++-mode-hook 'eglot-ensure)
+
+(use-package cmake-mode)
+(use-package meson-mode)
 
 ;; C
 (add-to-list 'eglot-server-programs
