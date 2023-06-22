@@ -52,6 +52,8 @@
 		eshell-mode-hook
         eat-mode-hook
         eww-mode-hook
+        elfeed-search-mode-hook
+        elfeed-show-mode-hook
         devdocs-mode-hook
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
@@ -166,19 +168,21 @@
           ,@modus-themes-preset-overrides-faint))
   (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi)))
 
-;; Ef-themes
-(use-package ef-themes
-  :config
-  (setq ef-themes-to-toggle '(ef-cyprus ef-night)))
-
 (use-package catppuccin-theme
   :config
-  (load-theme 'catppuccin)
+  ;;(load-theme 'catppuccin)
   (setq catppuccin-italic-comments t)
   (setq catppuccin-flavor 'mocha)
-  (catppuccin-set-color 'surface2  "#6d77bf" 'mocha)
-;;  (catppuccin-set-color 'surface2  "#a8b3ff" 'mocha)
-  (catppuccin-reload))
+  ;;(catppuccin-set-color 'surface2  "#6d77bf" 'mocha)
+  ;;(catppuccin-set-color 'surface2  "#a8b3ff" 'mocha)
+  ;;(catppuccin-set-color 'surface2 "#79bbfc" 'mocha)
+  (catppuccin-set-color 'surface2 "#7b97d1" 'mocha)
+  ;;(catppuccin-reload)
+  )
+
+(use-package nordic-night-theme
+  :config
+  (load-theme 'nordic-night))
 
 (defun stm/toggle-theme ()
   (interactive)
@@ -195,17 +199,6 @@
 (use-package mood-line
   :config
   (mood-line-mode))
-
-;;(use-package telephone-line
-;;  :config
-;;  (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-;;        telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-;;        telephone-line-primary-right-separator 'telephone-line-cubed-right
-;;        telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
-;;
-;;  (setq telephone-line-height 24
-;;        telephone-line-evil-use-short-tag t)
-;;  (telephone-line-mode 1))
 
 ;; All The Icons
 ;; Make sure to run 'M-x all-the-icons-install-fonts'
@@ -240,17 +233,6 @@
   (vertico-cycle t)
   :init
   (vertico-mode))
-
-;; (when (display-graphic-p)
-;;   (use-package vertico-posframe
-;;     :after vertico
-;;     :init
-;;     (vertico-posframe-mode 1)
-;;     :config
-;;     (setq vertico-posframe-parameters
-;;           '((left-fringe . 8)
-;;             (right-fringe . 8)))
-;;     ))
 
 (use-package orderless
   :init
@@ -289,6 +271,12 @@
                    #'completion--in-region)
                  args))))
 
+;; Embark
+(use-package embark)
+
+(use-package embark-consult
+  :after embark)
+
 ;; Dashboard
 (use-package dashboard
   :config
@@ -315,7 +303,7 @@
               ("C-M-i" . company-complete))
   :init
   (setq company-idle-delay 0.1)
-  (setq company-tooltip-limit 5)
+  (setq company-tooltip-limit 10)
   (setq company-minimum-prefix-length 2)
   (setq company-selection-wrap-around t)
   (setq company-require-match 'never)
@@ -497,19 +485,6 @@
 (setq tab-bar-show nil)
 (tab-bar-mode 1)
 
-
-;; Eshell
-(setq eshell-banner-message "
-  Welcome to the Emacs
-
-                         _/                  _/  _/
-      _/_/      _/_/_/  _/_/_/      _/_/    _/  _/
-   _/_/_/_/  _/_/      _/    _/  _/_/_/_/  _/  _/
-  _/            _/_/  _/    _/  _/        _/  _/
-   _/_/_/  _/_/_/    _/    _/    _/_/_/  _/  _/
-
-")
-
 ;; Matrix + IRC
 (use-package ement)
 
@@ -530,7 +505,12 @@
           ("https://inconvergent.net/atom.xml" tech art lisp)
           ("https://chollinger.com/blog/index.xml" tech)
           ("https://nullprogram.com/feed/" tech c)
-          ("https://two-wrongs.com/feed" tech math)))
+          ("https://two-wrongs.com/feed" tech math)
+          ("https://geo-ant.github.io/blog/feed.xml" tech c++ rust)
+          ("https://fasterthanli.me/index.xml" tech c++ rust)
+          ("https://thenumb.at/feed.xml" tech graphics)
+          ("https://batsov.com/atom.xml" tech ruby lisp ocaml)
+          ("https://matt.might.net/articles/feed.rss" tech plang)))
   :bind
   ("C-x w" . elfeed))
 
@@ -550,9 +530,9 @@
   (popper-echo-mode +1))
 
 ;; Docker
-(use-package docker
-  :ensure t
-  :bind ("C-c D" . docker))
+;; (use-package docker
+;;   :ensure t
+;;   :bind ("C-c D" . docker))
 
 ;; Dumb-Jump
 (use-package dumb-jump
@@ -661,11 +641,17 @@
 
 ;; Documentation
 (use-package devdocs
-  :hook
-  (devdocs-mode . visual-line-mode)
   :bind
   ("C-h D" . devdocs-lookup))
 
+(defun stm/disable-visual-line-mode ()
+  "Disable `visual-line-mode' in certain buffers."
+  (when (or (derived-mode-p 'elfeed-search-mode)
+            (derived-mode-p 'elfeed-show-mode)
+            (derived-mode-p 'devdocs-mode))
+    (visual-line-mode -1)))
+
+(add-hook 'after-change-major-mode-hook 'stm/disable-visual-line-mode)
 
 ;; Sideline
 ;; (use-package sideline-flymake)
@@ -688,7 +674,7 @@
 ;; Eglot
 (use-package eglot
   :bind
-  ("C-c i" . 'stm/toggle-eglot)
+  ("C-c l" . 'stm/toggle-eglot)
   :config
   (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
   ;; gem install solargraph
@@ -793,6 +779,27 @@
 ;; Haskell
 (use-package haskell-mode)
 
+;; OCaml
+(use-package tuareg
+  :mode (("\\.ocamlinit\\'" . tuareg-mode))
+  :hook
+  (tuareg-mode . prettify-symbols-mode))
+(use-package dune)
+(use-package merlin
+  :hook
+  (tuareg-mode. merlin-mode)
+  (merlin-mode . company-mode)
+  :config
+  (setq merlin-eldoc-occurrences nil))
+
+(use-package merlin-eldoc
+  :hook
+  ((tuareg-mode) . merlin-eldoc-setup))
+
+(use-package utop
+  :hook
+  (tuareg-mode . utop-minor-mode))
+
 ;; Crystal
 (use-package crystal-mode
   :interpreter
@@ -801,16 +808,16 @@
   (add-to-list 'auto-mode-alist '("\\.cr$" . crystal-mode)))
 
 ;; Julia
-(use-package julia-mode)
+;; (use-package julia-mode)
 
-(use-package julia-repl
-  :after julia-mode
-  :bind
-  (:map julia-mode-map
-        ("C-c C-e" . julia-repl-send-line)
-        ("C-c C-b" . julia-repl-send-buffer)
-        ("C-c C-r" . julia-repl-send-region))
-  )
+;; (use-package julia-repl
+;;   :after julia-mode
+;;   :bind
+;;   (:map julia-mode-map
+;;         ("C-c C-e" . julia-repl-send-line)
+;;         ("C-c C-b" . julia-repl-send-buffer)
+;;         ("C-c C-r" . julia-repl-send-region))
+;;  )
 
 ;; Golang
 (use-package go-mode)
@@ -821,3 +828,6 @@
 ;; Lua
 (use-package lua-mode)
 
+;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+;; ## end of OPAM user-setup addition for emacs / base ## keep this line

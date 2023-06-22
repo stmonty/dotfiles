@@ -1,4 +1,0 @@
-* dotfiles
-My personal configuration files
-
-I currently use [[https://voidlinux.org/][Void Linux]] on my desktop and [[https://endeavouros.com/][EndeavourOS]] on my laptop.
