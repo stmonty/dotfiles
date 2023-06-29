@@ -180,9 +180,11 @@
   ;;(catppuccin-reload)
   )
 
-(use-package nordic-night-theme
+(use-package nordic-night-theme)
+
+(use-package vscode-dark-plus-theme
   :config
-  (load-theme 'nordic-night))
+  (load-theme 'vscode-dark-plus))
 
 (defun stm/toggle-theme ()
   (interactive)
@@ -494,8 +496,7 @@
   (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
         elfeed-show-entry-switch 'display-buffer)
   (setq elfeed-feeds
-        '(("https://drewdevault.com/blog/index.xml" tech foss)
-          ("https://thephd.dev/feed.xml" tech c++)
+        '(("https://thephd.dev/feed.xml" tech c++)
           ("https://takeonrules.com/feed.xml" tech)
           ("https://www.rousette.org.uk/index.xml" tech emacs)
           ("https://lepisma.xyz/atom.xml" tech emacs)
@@ -514,20 +515,20 @@
   :bind
   ("C-x w" . elfeed))
 
-(use-package popper
-  :bind (("C-;"   . popper-toggle-latest)
-         ("M-;"   . popper-cycle)
-         ("C-M-;" . popper-toggle-type))
-  :init
-  (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          "Output\\*$"
-          "\\*Async Shell Command\\*"
-          help-mode
-          compilation-mode
-          eshell-mode))
-  (popper-mode +1)
-  (popper-echo-mode +1))
+;; (use-package popper
+;;   :bind (("C-;"   . popper-toggle-latest)
+;;          ("M-;"   . popper-cycle)
+;;          ("C-M-;" . popper-toggle-type))
+;;   :init
+;;   (setq popper-reference-buffers
+;;         '("\\*Messages\\*"
+;;           "Output\\*$"
+;;           "\\*Async Shell Command\\*"
+;;           help-mode
+;;           compilation-mode
+;;           eshell-mode))
+;;   (popper-mode +1)
+;;   (popper-echo-mode +1))
 
 ;; Docker
 ;; (use-package docker
@@ -776,8 +777,16 @@
   :interpreter
   ("scala" . scala-mode))
 
+;; Coq
+(use-package proof-general)
+(use-package company-coq
+  :hook
+  (coq-mode . company-coq))
+
 ;; Haskell
 (use-package haskell-mode)
+ ;; :hook
+ ;; (haskell-mode . haskell-unicode-input-method-enable))
 
 ;; OCaml
 (use-package tuareg
@@ -821,9 +830,6 @@
 
 ;; Golang
 (use-package go-mode)
-
-;; Zig
-(use-package zig-mode)
 
 ;; Lua
 (use-package lua-mode)
