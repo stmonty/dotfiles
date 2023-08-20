@@ -78,8 +78,7 @@
 			    ))
 
 ;; Set font size
-(set-face-attribute 'default nil :height 120)
-(add-hook 'find-file-hook (lambda () (set-face-attribute 'default nil :height 120)))
+(set-face-attribute 'default nil :height 130)
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
@@ -146,11 +145,6 @@
 (use-package exec-path-from-shell)
 (exec-path-from-shell-initialize)
 
-;; Expand-region
-(use-package expand-region
-  :bind
-  ("C-=" . er/expand-region))
-
 (use-package modus-themes
   :config
   (setq modus-themes-common-palette-overrides
@@ -177,25 +171,25 @@
   ;;(catppuccin-set-color 'surface2  "#a8b3ff" 'mocha)
   ;;(catppuccin-set-color 'surface2 "#79bbfc" 'mocha)
   (catppuccin-set-color 'surface2 "#7b97d1" 'mocha)
-  ;;(catppuccin-reload)
+;;  (catppuccin-reload)
   )
 
-(use-package nordic-night-theme)
-
-(use-package vscode-dark-plus-theme
+(use-package kaolin-themes
   :config
-  (load-theme 'vscode-dark-plus))
+  (setq kaolin-themes-git-gutter-solid nil)
+  (setq kaolin-themes-modeline-border t)
+  (setq kaolin-themes-comments-style 'contrast)
+  (setq kaolin-themes-italic-comments t)
+  (setq kaolin-themes-distinct-company-scrollbar t)
+  (load-theme 'kaolin-bubblegum))
 
 (defun stm/toggle-theme ()
   (interactive)
-  (if (eq (car custom-enabled-themes) 'tango-dark)
-      (progn (disable-theme 'tango-dark)
-             (load-theme 'tango))
-    (progn (disable-theme 'tango)
-           (load-theme 'tango-dark))))
-
-(global-set-key (kbd "C-c t") #'ef-themes-toggle)
-;;(global-set-key (kbd "C-c t") #'stm/toggle-theme)
+  (if (eq (car custom-enabled-themes) 'kaolin-light)
+      (progn (disable-theme 'kaolin-light)
+             (load-theme 'kaolin-bubblegum))
+    (progn (disable-theme 'kaolin-bubblegum)
+           (load-theme 'kaolin-light))))
 
 ;; Mood-line
 (use-package mood-line
@@ -305,7 +299,7 @@
               ("C-M-i" . company-complete))
   :init
   (setq company-idle-delay 0.1)
-  (setq company-tooltip-limit 10)
+  (setq company-tooltip-limit 6)
   (setq company-minimum-prefix-length 2)
   (setq company-selection-wrap-around t)
   (setq company-require-match 'never)
