@@ -181,14 +181,14 @@
   (setq kaolin-themes-comments-style 'contrast)
   (setq kaolin-themes-italic-comments t)
   (setq kaolin-themes-distinct-company-scrollbar t)
-  (load-theme 'kaolin-bubblegum))
+  (load-theme 'kaolin-light))
 
 (defun stm/toggle-theme ()
   (interactive)
   (if (eq (car custom-enabled-themes) 'kaolin-light)
       (progn (disable-theme 'kaolin-light)
-             (load-theme 'kaolin-bubblegum))
-    (progn (disable-theme 'kaolin-bubblegum)
+             (load-theme 'kaolin-aurora))
+    (progn (disable-theme 'kaolin-aurora)
            (load-theme 'kaolin-light))))
 
 ;; Mood-line
@@ -447,27 +447,27 @@
 
 ;; Git Gutter
 ;; Credit to Ian Y.E Pan for these code snippets
-(use-package git-gutter
-  :hook
-  (prog-mode . git-gutter-mode)
-  :config
-  (setq git-gutter:update-interval 0.02)
-  (setq git-gutter:window-width 1)
-  ;; Note that this is only to make git gutter work for Non-Doom themes
-  ;; Comment this out and uncomment git-gutter-fringe for Doom-Themes
-  ;; (setq git-gutter:added-sign " "
-  ;;       git-gutter:deleted-sign " "
-  ;;       git-gutter:modified-sign " ")
-  )
+;; (use-package git-gutter
+;;   :hook
+;;   (prog-mode . git-gutter-mode)
+;;   :config
+;;   (setq git-gutter:update-interval 0.02)
+;;   (setq git-gutter:window-width 1)
+;;   ;; Note that this is only to make git gutter work for Non-Doom themes
+;;   ;; Comment this out and uncomment git-gutter-fringe for Doom-Themes
+;;   ;; (setq git-gutter:added-sign " "
+;;   ;;       git-gutter:deleted-sign " "
+;;   ;;       git-gutter:modified-sign " ")
+;;   )
 
-(use-package git-gutter-fringe
-  :config
-  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil
-    '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil
-    '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil
-    'bottom))
+;; (use-package git-gutter-fringe
+;;   :config
+;;   (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil
+;;     '(center repeated))
+;;   (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil
+;;     '(center repeated))
+;;   (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil
+;;     'bottom))
 
 ;; Treemacs
 (use-package treemacs
@@ -525,9 +525,15 @@
 ;;   (popper-echo-mode +1))
 
 ;; Docker
-;; (use-package docker
-;;   :ensure t
-;;   :bind ("C-c D" . docker))
+(use-package docker
+  :ensure t
+  :bind ("C-c D" . docker))
+
+;; Verb (HTTP Client + Org)
+(use-package verb)
+
+;; RESTClient (More simple HTTP Client)
+(use-package restclient)
 
 ;; Dumb-Jump
 (use-package dumb-jump
@@ -584,6 +590,7 @@
   (setq org-ellipsis " ▾")
   (setq org-return-follows-link t)
   (setq org-startup-truncated nil)
+  (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
 ;;  (stm/org-font-setup)
   )
 
@@ -649,13 +656,13 @@
 (add-hook 'after-change-major-mode-hook 'stm/disable-visual-line-mode)
 
 ;; Sideline
-;; (use-package sideline-flymake)
-;; (use-package sideline
-;;   :hook (flymake-mode . sideline-mode)
-;;   :init
-;;   (setq sideline-flymake-display-mode 'line)
-;;   (setq sideline-backends-right '(sideline-flymake)
-;;         sideline-priority 100))
+(use-package sideline-flymake)
+(use-package sideline
+  :hook (flymake-mode . sideline-mode)
+  :init
+  (setq sideline-flymake-display-mode 'line)
+  (setq sideline-backends-right '(sideline-flymake)
+        sideline-priority 100))
 
 ;; LSP + Languages
 
@@ -804,11 +811,11 @@
   (tuareg-mode . utop-minor-mode))
 
 ;; Crystal
-(use-package crystal-mode
-  :interpreter
-  ("crystal" . crystal-mode)
-  :config
-  (add-to-list 'auto-mode-alist '("\\.cr$" . crystal-mode)))
+;; (use-package crystal-mode
+;;   :interpreter
+;;   ("crystal" . crystal-mode)
+;;   :config
+;;   (add-to-list 'auto-mode-alist '("\\.cr$" . crystal-mode)))
 
 ;; Julia
 ;; (use-package julia-mode)
