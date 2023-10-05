@@ -14,18 +14,19 @@
 (scroll-bar-mode -1) ;; Disable visible scrollbar
 (tool-bar-mode -1)   ;; Disable the toolbar
 (tooltip-mode -1)    ;; Disable the tooltips
-;; (setq default-frame-alist
-;;       (append (list
-;; 	           '(min-height . 1)
-;;                '(height     . 45)
-;; 	           '(min-width  . 1)
-;;                '(width      . 81)
-;;                '(vertical-scroll-bars . nil)
-;;                '(internal-border-width . 24)
-;;                '(left-fringe    . 1)
-;;                '(right-fringe   . 1)
-;;                '(tool-bar-lines . 0)
-;;                '(menu-bar-lines . 0))))
+
+(setq default-frame-alist
+      (append (list
+	           '(min-height . 1)
+               '(height     . 45)
+	           '(min-width  . 1)
+               '(width      . 81)
+               '(vertical-scroll-bars . nil)
+               '(internal-border-width . 10)
+               '(left-fringe    . 1)
+               '(right-fringe   . 1)
+               '(tool-bar-lines . 0)
+               '(menu-bar-lines . 0))))
 
 ;; Set Transparency
 ;;(set-frame-parameter (selected-frame) 'alpha '(95 95))
@@ -187,8 +188,8 @@
   (interactive)
   (if (eq (car custom-enabled-themes) 'kaolin-light)
       (progn (disable-theme 'kaolin-light)
-             (load-theme 'kaolin-aurora))
-    (progn (disable-theme 'kaolin-aurora)
+             (load-theme 'kaolin-dark))
+    (progn (disable-theme 'kaolin-dark)
            (load-theme 'kaolin-light))))
 
 ;; Mood-line
@@ -471,18 +472,30 @@
 
 ;; Treemacs
 (use-package treemacs
-  :bind ("C-c s" . treemacs))
+  :bind ("C-c s" . treemacs)
+  :config
+  (setq treemacs-width 30)
+  (treemacs-project-follow-mode 1))
 
 (use-package treemacs-all-the-icons
   :config
   (treemacs-load-theme "all-the-icons"))
+
+;; Emulate-a-Terminal
+(use-package eat
+  :bind (("M-RET" . eat))
+  :config
+  ;; Close the terminal buffer when the shell terminates.
+  (setq eat-kill-buffer-on-exit t)
+  ;; Enable mouse-support.
+  (setq eat-enable-mouse t))
 
 ;; Tab-Bar (Window workspaces)
 (setq tab-bar-show nil)
 (tab-bar-mode 1)
 
 ;; Matrix + IRC
-(use-package ement)
+;; (use-package ement)
 
 ;; RSS
 (use-package elfeed
@@ -530,10 +543,13 @@
   :bind ("C-c D" . docker))
 
 ;; Verb (HTTP Client + Org)
-(use-package verb)
+;; (use-package verb)
 
 ;; RESTClient (More simple HTTP Client)
 (use-package restclient)
+
+;; RMSBolt (Godbolt)
+(use-package rmsbolt)
 
 ;; Dumb-Jump
 (use-package dumb-jump
@@ -636,10 +652,10 @@
         org-roam-ui-open-on-start t))
 
 ;; Paredit
-(use-package paredit
-  :hook
-  (lisp-mode . paredit-mode)
-  (scheme-mode . paredit-mode))
+;; (use-package paredit
+;;   :hook
+;;   (lisp-mode . paredit-mode)
+;;   (scheme-mode . paredit-mode))
 
 ;; Documentation
 (use-package devdocs
@@ -706,9 +722,9 @@
 
 ;; Python
 (use-package python-mode)
-(use-package apheleia
-  :hook
-  (apheleia-mode . python-mode))
+;; (use-package apheleia
+;;   :hook
+;;   (apheleia-mode . python-mode))
 
 ;; Ruby
 ;;(add-hook 'ruby-mode-hook 'eglot-ensure)
@@ -720,10 +736,10 @@
 (use-package sly)
 
 ;; Scheme - Guile
-(use-package geiser)
+;; (use-package geiser)
 
-(use-package geiser-guile
-  :after geiser)
+;; (use-package geiser-guile
+;;   :after geiser)
 
 ;; Clojure
 (use-package clojure-mode)
@@ -774,9 +790,9 @@
 (use-package yaml-mode)
 
 ;; Scala
-(use-package scala-mode
-  :interpreter
-  ("scala" . scala-mode))
+;; (use-package scala-mode
+;;   :interpreter
+;;   ("scala" . scala-mode))
 
 ;; Coq
 (use-package proof-general)
@@ -828,6 +844,9 @@
 ;;         ("C-c C-b" . julia-repl-send-buffer)
 ;;         ("C-c C-r" . julia-repl-send-region))
 ;;  )
+
+;; Zig
+(use-package zig-mode)
 
 ;; Golang
 (use-package go-mode)
