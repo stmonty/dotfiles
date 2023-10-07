@@ -482,6 +482,7 @@
   (treemacs-load-theme "all-the-icons"))
 
 ;; Emulate-a-Terminal
+;; M-x eat-compile-terminfo on MacOS to fix 'delete' issue
 (use-package eat
   :bind (("M-RET" . eat))
   :config
@@ -853,3 +854,6 @@
 
 ;; Lua
 (use-package lua-mode)
+
+;; Nix
+(use-package nix-mode)
