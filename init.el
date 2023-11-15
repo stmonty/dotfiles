@@ -15,22 +15,22 @@
 (tool-bar-mode -1)   ;; Disable the toolbar
 (tooltip-mode -1)    ;; Disable the tooltips
 
-(setq default-frame-alist
-      (append (list
-	           '(min-height . 1)
-               '(height     . 45)
-	           '(min-width  . 1)
-               '(width      . 81)
-               '(vertical-scroll-bars . nil)
-               '(internal-border-width . 10)
-               '(left-fringe    . 1)
-               '(right-fringe   . 1)
-               '(tool-bar-lines . 0)
-               '(menu-bar-lines . 0))))
+;; (setq default-frame-alist
+;;       (append (list
+;; 	           '(min-height . 1)
+;;                '(height     . 45)
+;; 	           '(min-width  . 1)
+;;                '(width      . 81)
+;;                '(vertical-scroll-bars . nil)
+;;                '(internal-border-width . 10)
+;;                '(left-fringe    . 1)
+;;                '(right-fringe   . 1)
+;;                '(tool-bar-lines . 0)
+;;                '(menu-bar-lines . 0))))
 
-;; Set Transparency
-;;(set-frame-parameter (selected-frame) 'alpha '(95 95))
-;;(add-to-list 'default-frame-alist '(alpha 95 95))
+;; Set Transparency (pre Emacs-29)
+;; (set-frame-parameter (selected-frame) 'alpha '(90 90))
+;; (add-to-list 'default-frame-alist '(alpha 90 90))
 
 (menu-bar-mode -1)
 (setq ring-bell-function 'ignore)
@@ -47,18 +47,19 @@
       kept-new-versions 10
       kept-old-versions 5)
 
+;; Don't use line numbers in these modes!
 (dolist (mode '(org-mode-hook
 		term-mode-hook
 		shell-mode-hook
 		eshell-mode-hook
         eat-mode-hook
         eww-mode-hook
+        help-mode-hook
         elfeed-search-mode-hook
         elfeed-show-mode-hook
         devdocs-mode-hook
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
 
 ;; (setq-default cursor-type 'bar)
 
@@ -84,6 +85,11 @@
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
 (electric-pair-mode 1)
+
+;; Control warning level (C-h v "warning-minimum-level")
+;; This is to stop the pesky warning messages from popping a buffer up.
+;; However, maybe they should be more of a concern...
+(setq warning-minimum-level :error)
 
 ;; Indenting
 (setq-default indent-tabs-mode nil)
@@ -111,6 +117,12 @@
     (interactive)
     (stm/split-horizontally)
     (eshell))
+
+(defun stm/flymake-mode-hook ()
+  "Personal flymake-mode hook"
+  (define-key flymake-mode-map (kbd "C-h ,") 'flymake-show-buffer-diagnostics))
+
+(add-hook 'flymake-mode-hook 'stm/flymake-mode-hook)
 
 (global-set-key (kbd "C-x 2") #'stm/split-horizontally)
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
@@ -161,36 +173,44 @@
   (setq modus-vivendi-palette-overrides
         `(,@modus-themes-common-palette-overrides
           ,@modus-themes-preset-overrides-faint))
-  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi)))
+  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi))
+  (setq modus-themes-italic-constructs t))
 
 (use-package catppuccin-theme
   :config
-  ;;(load-theme 'catppuccin)
   (setq catppuccin-italic-comments t)
-  (setq catppuccin-flavor 'mocha)
-  ;;(catppuccin-set-color 'surface2  "#6d77bf" 'mocha)
-  ;;(catppuccin-set-color 'surface2  "#a8b3ff" 'mocha)
-  ;;(catppuccin-set-color 'surface2 "#79bbfc" 'mocha)
+  (setq catppuccin-highlight-matches t)
+  (setq catppuccin-flavor 'latte)
+  ;; Change comment color to something more readable
   (catppuccin-set-color 'surface2 "#7b97d1" 'mocha)
-;;  (catppuccin-reload)
+  (catppuccin-set-color 'surface2 "#8897b3" 'latte)
+  (catppuccin-reload)
   )
 
-(use-package kaolin-themes
-  :config
-  (setq kaolin-themes-git-gutter-solid nil)
-  (setq kaolin-themes-modeline-border t)
-  (setq kaolin-themes-comments-style 'contrast)
-  (setq kaolin-themes-italic-comments t)
-  (setq kaolin-themes-distinct-company-scrollbar t)
-  (load-theme 'kaolin-light))
+;; (use-package kaolin-themes
+;;   :config
+;;   (setq kaolin-themes-git-gutter-solid nil)
+;;   (setq kaolin-themes-modeline-border t)
+;;   (setq kaolin-themes-comments-style 'contrast)
+;;   (setq kaolin-themes-italic-comments t)
+;;   (setq kaolin-themes-distinct-company-scrollbar t)
+;;   (load-theme 'kaolin-light))
 
-(defun stm/toggle-theme ()
+;; (defun stm/toggle-theme ()
+;;   (interactive)
+;;   (if (eq (car custom-enabled-themes) 'kaolin-light)
+;;       (progn (disable-theme 'kaolin-light)
+;;              (load-theme 'catppuccin))
+;;     (progn (disable-theme 'catppuccin)
+;;            (load-theme 'kaolin-light))))
+
+(defun catppuccin-toggle-theme ()
+  "Toggle between catppuccin-themes"
   (interactive)
-  (if (eq (car custom-enabled-themes) 'kaolin-light)
-      (progn (disable-theme 'kaolin-light)
-             (load-theme 'kaolin-dark))
-    (progn (disable-theme 'kaolin-dark)
-           (load-theme 'kaolin-light))))
+  (if (eq catppuccin-flavor 'mocha)
+      (setq catppuccin-flavor 'latte)
+    (setq catppuccin-flavor 'mocha))
+  (catppuccin-reload))
 
 ;; Mood-line
 (use-package mood-line
@@ -485,6 +505,8 @@
 ;; M-x eat-compile-terminfo on MacOS to fix 'delete' issue
 (use-package eat
   :bind (("M-RET" . eat))
+  :hook
+  (eshell-mode . eat-eshell-mode)
   :config
   ;; Close the terminal buffer when the shell terminates.
   (setq eat-kill-buffer-on-exit t)
@@ -607,28 +629,28 @@
   (setq org-ellipsis " ▾")
   (setq org-return-follows-link t)
   (setq org-startup-truncated nil)
-  (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
-;;  (stm/org-font-setup)
+  ;;(define-key org-mode-map (kbd "C-c C-r") verb-command-map)
+  ;;(stm/org-font-setup)
   )
 
-(use-package org-modern
-  :after org
-  :hook
-  (org-mode . org-modern-mode)
-  :config
-;;  (set-face-attribute 'org-modern-symbol nil :family "Iosevka")
-  (setq
-   ;; Edit settings
-   org-auto-align-tags nil
-   org-tags-column 0
-   org-catch-invisible-edits 'show-and-error
-   org-special-ctrl-a/e t
-   org-insert-heading-respect-content t
+;; (use-package org-modern
+;;   :after org
+;;   :hook
+;;   (org-mode . org-modern-mode)
+;;   :config
+;; ;;  (set-face-attribute 'org-modern-symbol nil :family "Iosevka")
+;;   (setq
+;;    ;; Edit settings
+;;    org-auto-align-tags nil
+;;    org-tags-column 0
+;;    org-catch-invisible-edits 'show-and-error
+;;    org-special-ctrl-a/e t
+;;    org-insert-heading-respect-content t
 
-   ;; Org styling, hide markup etc.
-   org-hide-emphasis-markers t
-   org-pretty-entities t
-   org-pretty-entities-include-sub-superscripts nil))
+;;    ;; Org styling, hide markup etc.
+;;    org-hide-emphasis-markers t
+;;    org-pretty-entities t
+;;    org-pretty-entities-include-sub-superscripts nil))
 
 (use-package org-roam
   :custom
@@ -846,6 +868,9 @@
 ;;         ("C-c C-r" . julia-repl-send-region))
 ;;  )
 
+;; Elixir
+(use-package elixir-mode)
+
 ;; Zig
 (use-package zig-mode)
 
@@ -857,3 +882,6 @@
 
 ;; Nix
 (use-package nix-mode)
+
+;; Protobuf
+(use-package protobuf-mode)
