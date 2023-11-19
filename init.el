@@ -577,7 +577,7 @@
 ;; Dumb-Jump
 (use-package dumb-jump
   :init
-  (setq dumb-jump-force-searcher 'rg)
+  (setq dumb-jump-prefer-searcher 'rg)
   (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
   (remove-hook 'xref-backend-functions #'etags--xref-backend)
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
