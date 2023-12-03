@@ -501,6 +501,12 @@
   :config
   (treemacs-load-theme "all-the-icons"))
 
+;; Move text up and down
+(use-package move-text
+  :bind
+  ("M-p" . 'move-text-up)
+  ("M-n" . 'move-text-down))
+
 ;; Emulate-a-Terminal
 ;; M-x eat-compile-terminfo on MacOS to fix 'delete' issue
 (use-package eat
