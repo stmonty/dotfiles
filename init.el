@@ -29,8 +29,8 @@
 ;;                '(menu-bar-lines . 0))))
 
 ;; Set Transparency (pre Emacs-29)
-;; (set-frame-parameter (selected-frame) 'alpha '(90 90))
-;; (add-to-list 'default-frame-alist '(alpha 90 90))
+;;(set-frame-parameter (selected-frame) 'alpha '(90 90))
+;;(add-to-list 'default-frame-alist '(alpha 90 90))
 
 (menu-bar-mode -1)
 (setq ring-bell-function 'ignore)
@@ -115,14 +115,15 @@
 (defun stm/split-eshell ()
     "Opens eshell in a bottom window"
     (interactive)
-    (stm/split-horizontally)
+    (split-window-below -15)
+    (other-window 1)
     (eshell))
 
-(defun stm/flymake-mode-hook ()
-  "Personal flymake-mode hook"
-  (define-key flymake-mode-map (kbd "C-h ,") 'flymake-show-buffer-diagnostics))
+;; (defun stm/flymake-mode-hook ()
+;;   "Personal flymake-mode hook"
+;;   (define-key flymake-mode-map (kbd "C-h ,") 'flymake-show-buffer-diagnostics))
 
-(add-hook 'flymake-mode-hook 'stm/flymake-mode-hook)
+;;(add-hook 'flymake-mode-hook 'stm/flymake-mode-hook)
 
 (global-set-key (kbd "C-x 2") #'stm/split-horizontally)
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
@@ -312,6 +313,12 @@
   (yas-global-mode 1))
 (use-package yasnippet-snippets
   :after yasnippet)
+
+
+;; Flycheck
+(use-package flycheck
+  :init
+  (global-flycheck-mode))
 
 ;; Company
 (use-package company
@@ -583,7 +590,7 @@
 ;; Dumb-Jump
 (use-package dumb-jump
   :init
-  (setq dumb-jump-prefer-searcher 'rg)
+  (setq dumb-jump-force-searcher 'rg)
   (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
   (remove-hook 'xref-backend-functions #'etags--xref-backend)
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
@@ -701,13 +708,17 @@
 (add-hook 'after-change-major-mode-hook 'stm/disable-visual-line-mode)
 
 ;; Sideline
-(use-package sideline-flymake)
 (use-package sideline
-  :hook (flymake-mode . sideline-mode)
+  :hook
+  (flycheck-mode . sideline-mode)
   :init
-  (setq sideline-flymake-display-mode 'line)
-  (setq sideline-backends-right '(sideline-flymake)
+  (setq sideline-backends-right '(sideline-flycheck)
         sideline-priority 100))
+
+(use-package sideline-flycheck
+  :hook
+  (flycheck-mode . sideline-flycheck-setup))
+
 
 ;; LSP + Languages
 
