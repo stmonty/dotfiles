@@ -115,7 +115,8 @@
 (defun stm/split-eshell ()
     "Opens eshell in a bottom window"
     (interactive)
-    (stm/split-horizontally)
+    (split-window-below -15)
+    (other-window 1)
     (eshell))
 
 (defun stm/flymake-mode-hook ()
