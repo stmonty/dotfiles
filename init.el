@@ -129,7 +129,8 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-;;(set-face-attribute 'default nil :family "Iosevka")
+(set-face-attribute 'default nil :family "Ubuntu Mono")
+(set-face-attribute 'default nil :height 120)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
 ;; Initialize package sources
@@ -185,17 +186,8 @@
   ;; Change comment color to something more readable
   (catppuccin-set-color 'surface2 "#7b97d1" 'mocha)
   (catppuccin-set-color 'surface2 "#8897b3" 'latte)
-  (catppuccin-reload)
+  ;;(catppuccin-reload)
   )
-
-;; (use-package kaolin-themes
-;;   :config
-;;   (setq kaolin-themes-git-gutter-solid nil)
-;;   (setq kaolin-themes-modeline-border t)
-;;   (setq kaolin-themes-comments-style 'contrast)
-;;   (setq kaolin-themes-italic-comments t)
-;;   (setq kaolin-themes-distinct-company-scrollbar t)
-;;   (load-theme 'kaolin-light))
 
 ;; (defun stm/toggle-theme ()
 ;;   (interactive)
@@ -212,6 +204,14 @@
       (setq catppuccin-flavor 'latte)
     (setq catppuccin-flavor 'mocha))
   (catppuccin-reload))
+
+(use-package timu-spacegrey-theme
+  :config
+  (setq timu-spacegrey-contrasted-comments t)
+  (setq timu-spacegrey-mode-line-border t)
+  (setq timu-spacegrey-italic-faces t)
+  (setq timu-spacegrey-contrasted-foreground t)
+  (load-theme 'timu-spacegrey))
 
 ;; Mood-line
 (use-package mood-line
@@ -290,7 +290,10 @@
                  args))))
 
 ;; Embark
-(use-package embark)
+(use-package embark
+  :bind
+  ("C-." . embark-act)
+  ("C-;" . embark-dwim))
 
 (use-package embark-consult
   :after embark)
