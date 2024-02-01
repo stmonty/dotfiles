@@ -129,7 +129,7 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-;;(set-face-attribute 'default nil :family "Iosevka")
+(set-face-attribute 'default nil :family "Iosevka")
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
 ;; Initialize package sources
@@ -710,6 +710,19 @@
   (setq sideline-backends-right '(sideline-flymake)
         sideline-priority 100))
 
+;; Debugging
+;;(use-package dape)
+
+;; AI Integration
+(use-package gptel
+  :config
+  (setq-default gptel-model "mistral:latest" ;Pick your default model
+                gptel-backend (gptel-make-ollama "Ollama"
+                                                 :host "localhost:11434"
+                                                 :models '("codellama:latest" "mistral:latest")
+                                                 :stream t))
+  )
+
 ;; LSP + Languages
 
 (defun stm/toggle-eglot ()
@@ -790,8 +803,9 @@
 (use-package meson-mode)
 
 ;; C
-(add-to-list 'eglot-server-programs
-             '((c-mode) "ccls"))
+(add-to-list 'eglot-server-programs 
+             `(c-mode . ,(eglot-alternatives '("ccls" "clangd"))))
+
 ;;(add-hook 'c-mode-hook 'eglot-ensure)
 
 ;; Web Development
