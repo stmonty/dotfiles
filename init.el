@@ -129,7 +129,7 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-(set-face-attribute 'default nil :family "Ubuntu Mono")
+(set-face-attribute 'default nil :family "Terminus")
 (set-face-attribute 'default nil :height 120)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
@@ -189,13 +189,18 @@
   ;;(catppuccin-reload)
   )
 
-;; (defun stm/toggle-theme ()
-;;   (interactive)
-;;   (if (eq (car custom-enabled-themes) 'kaolin-light)
-;;       (progn (disable-theme 'kaolin-light)
-;;              (load-theme 'catppuccin))
-;;     (progn (disable-theme 'catppuccin)
-;;            (load-theme 'kaolin-light))))
+(use-package standard-themes
+  :config
+  (setq standard-themes-italic-constructs t)
+  (load-theme 'tango-dark))
+
+(defun stm/toggle-theme ()
+  (interactive)
+  (if (eq (car custom-enabled-themes) 'tango-dark)
+      (progn (disable-theme 'tango-dark)
+             (load-theme 'standard-light))
+    (progn (disable-theme 'standard-light)
+           (load-theme 'tango-dark))))
 
 (defun catppuccin-toggle-theme ()
   "Toggle between catppuccin-themes"
@@ -205,18 +210,15 @@
     (setq catppuccin-flavor 'mocha))
   (catppuccin-reload))
 
-(use-package timu-spacegrey-theme
-  :config
-  (setq timu-spacegrey-contrasted-comments t)
-  (setq timu-spacegrey-mode-line-border t)
-  (setq timu-spacegrey-italic-faces t)
-  (setq timu-spacegrey-contrasted-foreground t)
-  (load-theme 'timu-spacegrey))
-
 ;; Mood-line
 (use-package mood-line
+  ;:config
+  ;(mood-line-mode)
+  )
+
+(use-package minions
   :config
-  (mood-line-mode))
+  (minions-mode 1))
 
 ;; All The Icons
 ;; Make sure to run 'M-x all-the-icons-install-fonts'
