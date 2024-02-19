@@ -129,7 +129,7 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-(set-face-attribute 'default nil :family "Terminus")
+;;(set-face-attribute 'default nil :family "Ubuntu Mono")
 (set-face-attribute 'default nil :height 120)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
