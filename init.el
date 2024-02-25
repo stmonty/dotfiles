@@ -129,7 +129,7 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-;;(set-face-attribute 'default nil :family "Ubuntu Mono")
+(set-face-attribute 'default nil :family "Terminus")
 (set-face-attribute 'default nil :height 120)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
@@ -169,13 +169,20 @@
           (bg-line-number-active unspecified)
           (bg-line-number-inactive unspecified)
 
+          (fg-region unspecified)
+
           (border-mode-line-active unspecified)
           (border-mode-line-inactive unspecified)))
 
+  (setq modus-operandi-palette-overrides
+        `(,@modus-themes-common-palette-overrides
+          ,@modus-themes-preset-overrides-intense))
+
   (setq modus-vivendi-palette-overrides
         `(,@modus-themes-common-palette-overrides
-          ,@modus-themes-preset-overrides-faint))
-  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi))
+          ,@modus-themes-preset-overrides-intense))
+  
+  (setq modus-themes-to-toggle '(modus-vivendi modus-operandi))
   (setq modus-themes-italic-constructs t))
 
 (use-package catppuccin-theme
