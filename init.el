@@ -83,7 +83,7 @@
 (set-face-attribute 'default nil :height 130)
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-
+                                        ;
 (electric-pair-mode 1)
 
 ;; Control warning level (C-h v "warning-minimum-level")
@@ -129,7 +129,7 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-(set-face-attribute 'default nil :family "Terminus")
+(set-face-attribute 'default nil :family "Ubuntu Mono")
 (set-face-attribute 'default nil :height 120)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
@@ -180,26 +180,30 @@
 
   (setq modus-vivendi-palette-overrides
         `(,@modus-themes-common-palette-overrides
-          ,@modus-themes-preset-overrides-intense))
+          ,@modus-themes-preset-overrides-faint))
   
   (setq modus-themes-to-toggle '(modus-vivendi modus-operandi))
   (setq modus-themes-italic-constructs t))
 
-(use-package catppuccin-theme
+;; (use-package catppuccin-theme
+;;   :config
+;;   (setq catppuccin-italic-comments t)
+;;   (setq catppuccin-highlight-matches t)
+;;   (setq catppuccin-flavor 'latte)
+;;   ;; Change comment color to something more readable
+;;   (catppuccin-set-color 'surface2 "#7b97d1" 'mocha)
+;;   (catppuccin-set-color 'surface2 "#8897b3" 'latte)
+;;   ;;(catppuccin-reload)
+;;   )
+
+(use-package adwaita-dark-theme
   :config
-  (setq catppuccin-italic-comments t)
-  (setq catppuccin-highlight-matches t)
-  (setq catppuccin-flavor 'latte)
-  ;; Change comment color to something more readable
-  (catppuccin-set-color 'surface2 "#7b97d1" 'mocha)
-  (catppuccin-set-color 'surface2 "#8897b3" 'latte)
-  ;;(catppuccin-reload)
-  )
+  (eval-after-load 'flymake #'adwaita-dark-theme-flymake-fringe-bmp-enable)
+  (load-theme 'adwaita-dark))
 
 (use-package standard-themes
   :config
-  (setq standard-themes-italic-constructs t)
-  (load-theme 'tango-dark))
+  (setq standard-themes-italic-constructs t))
 
 (defun stm/toggle-theme ()
   (interactive)
@@ -508,11 +512,15 @@
   :bind ("C-c s" . treemacs)
   :config
   (setq treemacs-width 30)
+  (setq treemacs-position 'right)
   (treemacs-project-follow-mode 1))
 
 (use-package treemacs-all-the-icons
   :config
   (treemacs-load-theme "all-the-icons"))
+
+;; Ace-Window
+(global-set-key (kbd "C-c o") 'ace-window)
 
 ;; Move text up and down
 (use-package move-text
@@ -736,7 +744,7 @@
   :bind
   ("C-c l" . 'stm/toggle-eglot)
   :config
-  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
+  ;;(add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
   ;; gem install solargraph
   (add-to-list 'eglot-server-programs
                '((ruby-mode) "solargraph"))
@@ -848,25 +856,25 @@
  ;; (haskell-mode . haskell-unicode-input-method-enable))
 
 ;; OCaml
-(use-package tuareg
-  :mode (("\\.ocamlinit\\'" . tuareg-mode))
-  :hook
-  (tuareg-mode . prettify-symbols-mode))
-(use-package dune)
-(use-package merlin
-  :hook
-  (tuareg-mode. merlin-mode)
-  (merlin-mode . company-mode)
-  :config
-  (setq merlin-eldoc-occurrences nil))
+;; (use-package tuareg
+;;   :mode (("\\.ocamlinit\\'" . tuareg-mode))
+;;   :hook
+;;   (tuareg-mode . prettify-symbols-mode))
+;; (use-package dune)
+;; (use-package merlin
+;;   :hook
+;;   (tuareg-mode. merlin-mode)
+;;   (merlin-mode . company-mode)
+;;   :config
+;;   (setq merlin-eldoc-occurrences nil))
 
-(use-package merlin-eldoc
-  :hook
-  ((tuareg-mode) . merlin-eldoc-setup))
+;; (use-package merlin-eldoc
+;;   :hook
+;;   ((tuareg-mode) . merlin-eldoc-setup))
 
-(use-package utop
-  :hook
-  (tuareg-mode . utop-minor-mode))
+;; (use-package utop
+;;   :hook
+;;   (tuareg-mode . utop-minor-mode))
 
 ;; Crystal
 ;; (use-package crystal-mode
@@ -904,3 +912,4 @@
 
 ;; Protobuf
 (use-package protobuf-mode)
+(put 'narrow-to-region 'disabled nil)
