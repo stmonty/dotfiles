@@ -199,6 +199,9 @@
 (use-package adwaita-dark-theme
   :config
   (eval-after-load 'flymake #'adwaita-dark-theme-flymake-fringe-bmp-enable)
+  (eval-after-load 'diff-hl #'adwaita-dark-theme-diff-hl-fringe-bmp-enable)
+  (adwaita-dark-theme-arrow-fringe-bmp-enable)
+  (setq adwaita-dark-theme-bold-vertico-current t)
   (load-theme 'adwaita-dark))
 
 (use-package standard-themes
@@ -743,6 +746,7 @@
 (use-package eglot
   :bind
   ("C-c l" . 'stm/toggle-eglot)
+  ("C-c a" . 'eglot-code-actions)
   :config
   ;;(add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
   ;; gem install solargraph
@@ -753,21 +757,23 @@
   ;;  (setq eglot-ignored-server-capabilities '(:hoverProvider))
   )
 
-(add-hook 'eglot-managed-mode-hook 
-       (lambda () (setq eldoc-documentation-strategy 
-                        #'eldoc-documentation-compose)))
+;; (add-hook 'eglot-managed-mode-hook 
+;;        (lambda () (setq eldoc-documentation-strategy 
+;;                         #'eldoc-documentation-compose)))
 
-;;(use-package eldoc-box
-;;  :config
-;;  (setq eldoc-box-max-pixel-height 300
-;;        eldoc-box-max-pixel-width  400))
-;;
+(use-package eldoc-box
+  :bind
+  ("C-h /" . 'eldoc-box-help-at-point)
+  :config
+  (setq eldoc-box-max-pixel-height 300
+        eldoc-box-max-pixel-width  400))
+
 ;;(add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t)
-;;
-;;(defun my-eldoc-box-setup ()
-;;  (set-face-attribute 'eldoc-box-body nil :font (face-attribute 'default :font)))
-;;
-;;(add-hook 'eldoc-box-hover-mode-hook 'my-eldoc-box-setup)
+
+(defun my-eldoc-box-setup ()
+  (set-face-attribute 'eldoc-box-body nil :font (face-attribute 'default :font)))
+
+(add-hook 'eldoc-box-hover-mode-hook 'my-eldoc-box-setup)
 
 
 ;; Python
