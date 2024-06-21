@@ -129,7 +129,7 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-(set-face-attribute 'default nil :family "Ubuntu Mono")
+(set-face-attribute 'default nil :family "ubuntu mono")
 (set-face-attribute 'default nil :height 120)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
@@ -340,7 +340,7 @@
               ("C-M-i" . company-complete))
   :init
   (setq company-idle-delay 0.1)
-  (setq company-tooltip-limit 6)
+  (setq company-tooltip-limit 8)
   (setq company-minimum-prefix-length 2)
   (setq company-selection-wrap-around t)
   (setq company-require-match 'never)
@@ -742,6 +742,18 @@
       (call-interactively 'eglot-shutdown)
     (call-interactively 'eglot)))
 
+;; (use-package apheleia
+;;   :hook
+;;   ((apheleia-mode . python-mode)
+;;    (apheleia-mode . c++-mode)
+;;    (apheleia-mode . c++ts-mode))
+;;   :config
+;;   (setq apheleia-formatters
+;;         '((python-mode . black)
+;;           (c++-mode . clang-format)
+;;           (c++ts-mode . clang-format)))
+;;)
+
 ;; Eglot
 (use-package eglot
   :bind
@@ -754,9 +766,13 @@
                '((ruby-mode) "solargraph"))
   (add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
   (setq eglot-connect-timeout 60)
-  ;;  (setq eglot-ignored-server-capabilities '(:hoverProvider))
+
+  (setq eglot-ignored-server-capabilities '(:hoverProvider))
   )
 
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               `(c++-mode . ("clangd" "--header-insertion=never"))))
 ;; (add-hook 'eglot-managed-mode-hook 
 ;;        (lambda () (setq eldoc-documentation-strategy 
 ;;                         #'eldoc-documentation-compose)))
@@ -765,8 +781,8 @@
   :bind
   ("C-h /" . 'eldoc-box-help-at-point)
   :config
-  (setq eldoc-box-max-pixel-height 300
-        eldoc-box-max-pixel-width  400))
+  (setq eldoc-box-max-pixel-height 500
+        eldoc-box-max-pixel-width  500))
 
 ;;(add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t)
 
@@ -778,9 +794,6 @@
 
 ;; Python
 (use-package python-mode)
-;; (use-package apheleia
-;;   :hook
-;;   (apheleia-mode . python-mode))
 
 ;; Ruby
 ;;(add-hook 'ruby-mode-hook 'eglot-ensure)
@@ -862,25 +875,25 @@
  ;; (haskell-mode . haskell-unicode-input-method-enable))
 
 ;; OCaml
-;; (use-package tuareg
-;;   :mode (("\\.ocamlinit\\'" . tuareg-mode))
-;;   :hook
-;;   (tuareg-mode . prettify-symbols-mode))
-;; (use-package dune)
-;; (use-package merlin
-;;   :hook
-;;   (tuareg-mode. merlin-mode)
-;;   (merlin-mode . company-mode)
-;;   :config
-;;   (setq merlin-eldoc-occurrences nil))
+(use-package tuareg
+  :mode (("\\.ocamlinit\\'" . tuareg-mode))
+  :hook
+  (tuareg-mode . prettify-symbols-mode))
+(use-package dune)
+(use-package merlin
+  :hook
+  (tuareg-mode. merlin-mode)
+  (merlin-mode . company-mode)
+  :config
+  (setq merlin-eldoc-occurrences nil))
 
-;; (use-package merlin-eldoc
-;;   :hook
-;;   ((tuareg-mode) . merlin-eldoc-setup))
+(use-package merlin-eldoc
+  :hook
+  ((tuareg-mode) . merlin-eldoc-setup))
 
-;; (use-package utop
-;;   :hook
-;;   (tuareg-mode . utop-minor-mode))
+(use-package utop
+  :hook
+  (tuareg-mode . utop-minor-mode))
 
 ;; Crystal
 ;; (use-package crystal-mode
