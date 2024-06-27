@@ -876,9 +876,7 @@
 
 ;; OCaml
 (use-package tuareg
-  :mode (("\\.ocamlinit\\'" . tuareg-mode))
-  :hook
-  (tuareg-mode . prettify-symbols-mode))
+  :mode (("\\.ocamlinit\\'" . tuareg-mode)))
 (use-package dune)
 (use-package merlin
   :hook
@@ -894,6 +892,8 @@
 (use-package utop
   :hook
   (tuareg-mode . utop-minor-mode))
+
+(use-package reason-mode)
 
 ;; Crystal
 ;; (use-package crystal-mode
@@ -931,4 +931,3 @@
 
 ;; Protobuf
 (use-package protobuf-mode)
-(put 'narrow-to-region 'disabled nil)
