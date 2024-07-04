@@ -1,8 +1,6 @@
 My personal configuration files; mostly for GNU Emacs.
 
-I currently use [https://voidlinux.org/](Void Linux) on my desktop and [https://endeavouros.com/](EndeavourOS) on my laptop.
-
-I am planning to make the switch to NixOS soon, so my NixOS configuration will be coming soon.
+I currently use (NixOS)[https://nixos.org] on my desktop. NixOS configurations coming soon.
 
 If you are interested in trying my Emacs configuration:
 ```shell

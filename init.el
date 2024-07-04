@@ -130,7 +130,7 @@
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
 (set-face-attribute 'default nil :family "ubuntu mono")
-(set-face-attribute 'default nil :height 120)
+(set-face-attribute 'default nil :height 100)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
 ;; Initialize package sources
