@@ -129,7 +129,7 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-(set-face-attribute 'default nil :family "ubuntu mono")
+;;(set-face-attribute 'default nil :family "Ubuntu Mono")
 (set-face-attribute 'default nil :height 100)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
@@ -551,29 +551,29 @@
 ;; (use-package ement)
 
 ;; RSS
-(use-package elfeed
-  :config
-  (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
-        elfeed-show-entry-switch 'display-buffer)
-  (setq elfeed-feeds
-        '(("https://thephd.dev/feed.xml" tech c++)
-          ("https://takeonrules.com/feed.xml" tech)
-          ("https://www.rousette.org.uk/index.xml" tech emacs)
-          ("https://lepisma.xyz/atom.xml" tech emacs)
-          ("https://karthinks.com/index.xml" tech emacs)
-          ("https://unixsheikh.com/feed.rss" tech unix foss)
-          ("https://sizeof.cat/index.xml" tech security)
-          ("https://inconvergent.net/atom.xml" tech art lisp)
-          ("https://chollinger.com/blog/index.xml" tech)
-          ("https://nullprogram.com/feed/" tech c)
-          ("https://two-wrongs.com/feed" tech math)
-          ("https://geo-ant.github.io/blog/feed.xml" tech c++ rust)
-          ("https://fasterthanli.me/index.xml" tech c++ rust)
-          ("https://thenumb.at/feed.xml" tech graphics)
-          ("https://batsov.com/atom.xml" tech ruby lisp ocaml)
-          ("https://matt.might.net/articles/feed.rss" tech plang)))
-  :bind
-  ("C-x w" . elfeed))
+;; (use-package elfeed
+;;   :config
+;;   (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
+;;         elfeed-show-entry-switch 'display-buffer)
+;;   (setq elfeed-feeds
+;;         '(("https://thephd.dev/feed.xml" tech c++)
+;;           ("https://takeonrules.com/feed.xml" tech)
+;;           ("https://www.rousette.org.uk/index.xml" tech emacs)
+;;           ("https://lepisma.xyz/atom.xml" tech emacs)
+;;           ("https://karthinks.com/index.xml" tech emacs)
+;;           ("https://unixsheikh.com/feed.rss" tech unix foss)
+;;           ("https://sizeof.cat/index.xml" tech security)
+;;           ("https://inconvergent.net/atom.xml" tech art lisp)
+;;           ("https://chollinger.com/blog/index.xml" tech)
+;;           ("https://nullprogram.com/feed/" tech c)
+;;           ("https://two-wrongs.com/feed" tech math)
+;;           ("https://geo-ant.github.io/blog/feed.xml" tech c++ rust)
+;;           ("https://fasterthanli.me/index.xml" tech c++ rust)
+;;           ("https://thenumb.at/feed.xml" tech graphics)
+;;           ("https://batsov.com/atom.xml" tech ruby lisp ocaml)
+;;           ("https://matt.might.net/articles/feed.rss" tech plang)))
+;;   :bind
+;;   ("C-x w" . elfeed))
 
 ;; (use-package popper
 ;;   :bind (("C-;"   . popper-toggle-latest)
@@ -618,6 +618,11 @@
 (use-package vundo
   :bind
   ("C-c v" . vundo))
+
+;; Direnv Integration
+(use-package envrc
+  :if (executable-find "direnv")
+  :hook (after-init . envrc-global-mode))
 
 (use-package markdown-mode)
 
