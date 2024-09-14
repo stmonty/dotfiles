@@ -160,6 +160,11 @@
 (use-package exec-path-from-shell)
 (exec-path-from-shell-initialize)
 
+
+(use-package ef-themes
+  :config
+  (load-theme 'ef-owl))
+
 (use-package modus-themes
   :config
   (setq modus-themes-common-palette-overrides
@@ -202,19 +207,20 @@
   (eval-after-load 'diff-hl #'adwaita-dark-theme-diff-hl-fringe-bmp-enable)
   (adwaita-dark-theme-arrow-fringe-bmp-enable)
   (setq adwaita-dark-theme-bold-vertico-current t)
-  (load-theme 'adwaita-dark))
+  )
 
 (use-package standard-themes
   :config
   (setq standard-themes-italic-constructs t))
 
 (defun stm/toggle-theme ()
+  "Toggles between a chosen light and dark theme"
   (interactive)
-  (if (eq (car custom-enabled-themes) 'tango-dark)
-      (progn (disable-theme 'tango-dark)
-             (load-theme 'standard-light))
-    (progn (disable-theme 'standard-light)
-           (load-theme 'tango-dark))))
+  (if (eq (car custom-enabled-themes) 'ef-owl)
+      (progn (disable-theme 'ef-owl)
+             (load-theme 'ef-eagle))
+    (progn (disable-theme 'ef-eagle)
+           (load-theme 'ef-owl))))
 
 (defun catppuccin-toggle-theme ()
   "Toggle between catppuccin-themes"
@@ -287,6 +293,7 @@
   ;; M-# bindings
   ("M-g g" . consult-goto-line)
   ("M-g M-g" . consult-goto-line)
+  ("M-g i" . consult-imenu)
   ;; M-s bindings (search-map)
   ("M-s d" . consult-find)
   ("M-s D" . consult-locate)
@@ -541,7 +548,9 @@
   ;; Close the terminal buffer when the shell terminates.
   (setq eat-kill-buffer-on-exit t)
   ;; Enable mouse-support.
-  (setq eat-enable-mouse t))
+  (setq eat-enable-mouse t)
+  ;; Disable Exit Code
+  (setq eat-enable-shell-prompt-annotation nil))
 
 ;; Tab-Bar (Window workspaces)
 (setq tab-bar-show nil)
@@ -936,3 +945,6 @@
 
 ;; Protobuf
 (use-package protobuf-mode)
+;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+;; ## end of OPAM user-setup addition for emacs / base ## keep this line
