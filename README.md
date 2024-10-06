@@ -1,6 +1,6 @@
 My personal configuration files; mostly for GNU Emacs.
 
-I currently use (NixOS)[https://nixos.org] on my desktop. NixOS configurations coming soon.
+I currently use [NixOS](https://nixos.org) on my desktop. NixOS configurations coming soon.
 
 If you are interested in trying my Emacs configuration:
 ```shell
