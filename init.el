@@ -201,17 +201,19 @@
 ;;   ;;(catppuccin-reload)
 ;;   )
 
-(use-package adwaita-dark-theme
-  :config
-  (eval-after-load 'flymake #'adwaita-dark-theme-flymake-fringe-bmp-enable)
-  (eval-after-load 'diff-hl #'adwaita-dark-theme-diff-hl-fringe-bmp-enable)
-  (adwaita-dark-theme-arrow-fringe-bmp-enable)
-  (setq adwaita-dark-theme-bold-vertico-current t)
-  )
+;; (use-package adwaita-dark-theme
+;;   :config
+;;   (eval-after-load 'flymake #'adwaita-dark-theme-flymake-fringe-bmp-enable)
+;;   (eval-after-load 'diff-hl #'adwaita-dark-theme-diff-hl-fringe-bmp-enable)
+;;   (adwaita-dark-theme-arrow-fringe-bmp-enable)
+;;   (setq adwaita-dark-theme-bold-vertico-current t)
+;;   )
 
-(use-package standard-themes
-  :config
-  (setq standard-themes-italic-constructs t))
+;; (use-package standard-themes
+;;   :config
+;;   (setq standard-themes-italic-constructs t))
+
+(global-unset-key (kbd "C-z"))
 
 (defun stm/toggle-theme ()
   "Toggles between a chosen light and dark theme"
@@ -230,11 +232,6 @@
     (setq catppuccin-flavor 'mocha))
   (catppuccin-reload))
 
-;; Mood-line
-(use-package mood-line
-  ;:config
-  ;(mood-line-mode)
-  )
 
 (use-package minions
   :config
@@ -522,7 +519,7 @@
   :bind ("C-c s" . treemacs)
   :config
   (setq treemacs-width 30)
-  (setq treemacs-position 'right)
+  (setq treemacs-position 'left)
   (treemacs-project-follow-mode 1))
 
 (use-package treemacs-all-the-icons
@@ -604,11 +601,7 @@
   :ensure t
   :bind ("C-c D" . docker))
 
-;; Verb (HTTP Client + Org)
-;; (use-package verb)
-
-;; RESTClient (More simple HTTP Client)
-(use-package restclient)
+(use-package plz-see)
 
 ;; RMSBolt (Godbolt)
 (use-package rmsbolt)
@@ -791,19 +784,19 @@
 ;;        (lambda () (setq eldoc-documentation-strategy 
 ;;                         #'eldoc-documentation-compose)))
 
-(use-package eldoc-box
-  :bind
-  ("C-h /" . 'eldoc-box-help-at-point)
-  :config
-  (setq eldoc-box-max-pixel-height 500
-        eldoc-box-max-pixel-width  500))
+;; (use-package eldoc-box
+;;   :bind
+;;   ("C-h /" . 'eldoc-box-help-at-point)
+;;   :config
+;;   (setq eldoc-box-max-pixel-height 500
+;;         eldoc-box-max-pixel-width  500))
 
-;;(add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t)
+;; ;;(add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t)
 
-(defun my-eldoc-box-setup ()
-  (set-face-attribute 'eldoc-box-body nil :font (face-attribute 'default :font)))
+;; (defun my-eldoc-box-setup ()
+;;   (set-face-attribute 'eldoc-box-body nil :font (face-attribute 'default :font)))
 
-(add-hook 'eldoc-box-hover-mode-hook 'my-eldoc-box-setup)
+;; (add-hook 'eldoc-box-hover-mode-hook 'my-eldoc-box-setup)
 
 
 ;; Python
@@ -889,25 +882,25 @@
  ;; (haskell-mode . haskell-unicode-input-method-enable))
 
 ;; OCaml
-(use-package tuareg
-  :mode (("\\.ocamlinit\\'" . tuareg-mode)))
-(use-package dune)
-(use-package merlin
-  :hook
-  (tuareg-mode. merlin-mode)
-  (merlin-mode . company-mode)
-  :config
-  (setq merlin-eldoc-occurrences nil))
+;; (use-package tuareg
+;;   :mode (("\\.ocamlinit\\'" . tuareg-mode)))
+;; (use-package dune)
+;; (use-package merlin
+;;   :hook
+;;   (tuareg-mode. merlin-mode)
+;;   (merlin-mode . company-mode)
+;;   :config
+;;   (setq merlin-eldoc-occurrences nil))
 
-(use-package merlin-eldoc
-  :hook
-  ((tuareg-mode) . merlin-eldoc-setup))
+;; (use-package merlin-eldoc
+;;   :hook
+;;   ((tuareg-mode) . merlin-eldoc-setup))
 
-(use-package utop
-  :hook
-  (tuareg-mode . utop-minor-mode))
+;; (use-package utop
+;;   :hook
+;;   (tuareg-mode . utop-minor-mode))
 
-(use-package reason-mode)
+;; (use-package reason-mode)
 
 ;; Crystal
 ;; (use-package crystal-mode
@@ -945,6 +938,3 @@
 
 ;; Protobuf
 (use-package protobuf-mode)
-;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
-;; ## end of OPAM user-setup addition for emacs / base ## keep this line
