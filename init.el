@@ -163,7 +163,7 @@
 
 (use-package ef-themes
   :config
-  (load-theme 'ef-owl))
+  (load-theme 'ef-elea-dark))
 
 (use-package modus-themes
   :config
@@ -218,11 +218,11 @@
 (defun stm/toggle-theme ()
   "Toggles between a chosen light and dark theme"
   (interactive)
-  (if (eq (car custom-enabled-themes) 'ef-owl)
-      (progn (disable-theme 'ef-owl)
-             (load-theme 'ef-eagle))
-    (progn (disable-theme 'ef-eagle)
-           (load-theme 'ef-owl))))
+  (if (eq (car custom-enabled-themes) 'ef-elea-dark)
+      (progn (disable-theme 'ef-elea-dark)
+             (load-theme 'ef-elea-light))
+    (progn (disable-theme 'ef-elea-light)
+           (load-theme 'ef-elea-dark))))
 
 (defun catppuccin-toggle-theme ()
   "Toggle between catppuccin-themes"
@@ -712,10 +712,11 @@
         org-roam-ui-open-on-start t))
 
 ;; Paredit
-;; (use-package paredit
-;;   :hook
-;;   (lisp-mode . paredit-mode)
-;;   (scheme-mode . paredit-mode))
+(use-package paredit
+  :hook
+  (lisp-mode . paredit-mode)
+  (scheme-mode . paredit-mode)
+  (clojure-mode . paredit-mode))
 
 ;; Documentation
 (use-package devdocs
