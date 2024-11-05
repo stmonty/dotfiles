@@ -239,17 +239,35 @@
 
 ;; All The Icons
 ;; Make sure to run 'M-x all-the-icons-install-fonts'
-(use-package all-the-icons
-  :if window-system
-  :config
-  (unless (find-font (font-spec :name "all-the-icons"))
-    (all-the-icons-install-fonts t)))
+;; (use-package all-the-icons
+;;   :if window-system
+;;   :config
+;;   (unless (find-font (font-spec :name "all-the-icons"))
+;;     (all-the-icons-install-fonts t)))
 
-(use-package all-the-icons-dired
-  :after all-the-icons
-  :hook (dired-mode . all-the-icons-dired-mode)
+(use-package nerd-icons
+  :custom
+  (nerd-icons-font-family "Symbols Nerd Font Mono")
   :config
-  (setq all-the-icons-dired-monochrome nil))
+  (unless (find-font (font-spec :name "Symbols Nerd Font Mono"))
+    (nerd-icons-install-fonts)))
+
+(use-package nerd-icons-dired
+  :after nerd-icons
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
+
+(use-package nerd-icons-completion
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+;; (use-package all-the-icons-dired
+;;   :after all-the-icons
+;;   :hook (dired-mode . all-the-icons-dired-mode)
+;;   :config
+;;   (setq all-the-icons-dired-monochrome nil))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -369,13 +387,12 @@
   :config
   (setq which-key-idle-delay 2.0))
 
-(use-package all-the-icons-completion
-  :after (all-the-icons marginalia)
-  :config
-  (add-hook 'marginalia-mode-hook
-            #'all-the-icons-completion-marginalia-setup)
-  (all-the-icons-completion-mode))
-
+;; (use-package all-the-icons-completion
+;;   :after (all-the-icons marginalia)
+;;   :config
+;;   (add-hook 'marginalia-mode-hook
+;;             #'all-the-icons-completion-marginalia-setup)
+;;   (all-the-icons-completion-mode))
 
 ;; Projectile
 ;; (use-package projectile
@@ -522,9 +539,13 @@
   (setq treemacs-position 'left)
   (treemacs-project-follow-mode 1))
 
-(use-package treemacs-all-the-icons
+;; (use-package treemacs-all-the-icons
+;;   :config
+;;   (treemacs-load-theme "all-the-icons"))
+
+(use-package treemacs-nerd-icons
   :config
-  (treemacs-load-theme "all-the-icons"))
+  (treemacs-load-theme "nerd-icons"))
 
 ;; Ace-Window
 (global-set-key (kbd "C-c o") 'ace-window)
