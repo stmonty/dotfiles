@@ -190,25 +190,6 @@
   (setq modus-themes-to-toggle '(modus-vivendi modus-operandi))
   (setq modus-themes-italic-constructs t))
 
-;; (use-package catppuccin-theme
-;;   :config
-;;   (setq catppuccin-italic-comments t)
-;;   (setq catppuccin-highlight-matches t)
-;;   (setq catppuccin-flavor 'latte)
-;;   ;; Change comment color to something more readable
-;;   (catppuccin-set-color 'surface2 "#7b97d1" 'mocha)
-;;   (catppuccin-set-color 'surface2 "#8897b3" 'latte)
-;;   ;;(catppuccin-reload)
-;;   )
-
-;; (use-package adwaita-dark-theme
-;;   :config
-;;   (eval-after-load 'flymake #'adwaita-dark-theme-flymake-fringe-bmp-enable)
-;;   (eval-after-load 'diff-hl #'adwaita-dark-theme-diff-hl-fringe-bmp-enable)
-;;   (adwaita-dark-theme-arrow-fringe-bmp-enable)
-;;   (setq adwaita-dark-theme-bold-vertico-current t)
-;;   )
-
 ;; (use-package standard-themes
 ;;   :config
 ;;   (setq standard-themes-italic-constructs t))
@@ -237,14 +218,6 @@
   :config
   (minions-mode 1))
 
-;; All The Icons
-;; Make sure to run 'M-x all-the-icons-install-fonts'
-;; (use-package all-the-icons
-;;   :if window-system
-;;   :config
-;;   (unless (find-font (font-spec :name "all-the-icons"))
-;;     (all-the-icons-install-fonts t)))
-
 (use-package nerd-icons
   :custom
   (nerd-icons-font-family "Symbols Nerd Font Mono")
@@ -262,12 +235,6 @@
   :config
   (nerd-icons-completion-mode)
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
-
-;; (use-package all-the-icons-dired
-;;   :after all-the-icons
-;;   :hook (dired-mode . all-the-icons-dired-mode)
-;;   :config
-;;   (setq all-the-icons-dired-monochrome nil))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -386,25 +353,6 @@
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 2.0))
-
-;; (use-package all-the-icons-completion
-;;   :after (all-the-icons marginalia)
-;;   :config
-;;   (add-hook 'marginalia-mode-hook
-;;             #'all-the-icons-completion-marginalia-setup)
-;;   (all-the-icons-completion-mode))
-
-;; Projectile
-;; (use-package projectile
-;;  :diminish projectile-mode
-;;  :config (projectile-mode)
-;;  :custom ((projectile-completion-system 'default))
-;;  :bind (:map projectile-mode-map
-;;  ("C-c p" . projectile-command-map))
-;;  :init
-;;  (when (file-directory-p "~/repos")
-;;    (setq projectile-project-search-path '("~/repos")))
-;;  (setq projectile-switch-project-action #'projectile-dired))
 
 ;; Magit
 (use-package magit
@@ -532,23 +480,16 @@
 ;;     'bottom))
 
 ;; Treemacs
-(use-package treemacs
-  :bind ("C-c s" . treemacs)
-  :config
-  (setq treemacs-width 30)
-  (setq treemacs-position 'left)
-  (treemacs-project-follow-mode 1))
-
-;; (use-package treemacs-all-the-icons
+;; (use-package treemacs
+;;   :bind ("C-c s" . treemacs)
 ;;   :config
-;;   (treemacs-load-theme "all-the-icons"))
+;;   (setq treemacs-width 30)
+;;   (setq treemacs-position 'left)
+;;   (treemacs-project-follow-mode 1))
 
-(use-package treemacs-nerd-icons
-  :config
-  (treemacs-load-theme "nerd-icons"))
-
-;; Ace-Window
-(global-set-key (kbd "C-c o") 'ace-window)
+;; (use-package treemacs-nerd-icons
+;;   :config
+;;   (treemacs-load-theme "nerd-icons"))
 
 ;; Move text up and down
 (use-package move-text
@@ -631,9 +572,9 @@
 (use-package dumb-jump
   :init
   (setq dumb-jump-prefer-searcher 'rg)
-  (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
   (remove-hook 'xref-backend-functions #'etags--xref-backend)
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
   (setq dumb-jump-disable-obsolete-warnings t)
   (dumb-jump-mode))
 
@@ -710,34 +651,37 @@
 ;;    org-pretty-entities t
 ;;    org-pretty-entities-include-sub-superscripts nil))
 
-(use-package org-roam
-  :custom
-  (org-roam-directory "~/roam")
-  :bind
-  (("C-c n l" . org-roam-buffer-toggle)
-   ("C-c n f" . org-roam-node-find)
-   ("C-c n i" . org-roam-node-insert))
-  :config
-  (org-roam-setup)
-  (org-roam-db-autosync-mode))
+;; (use-package org-roam
+;;   :custom
+;;   (org-roam-directory "~/roam")
+;;   :bind
+;;   (("C-c n l" . org-roam-buffer-toggle)
+;;    ("C-c n f" . org-roam-node-find)
+;;    ("C-c n i" . org-roam-node-insert))
+;;   :config
+;;   (org-roam-setup)
+;;   (org-roam-db-autosync-mode))
 
-(use-package websocket
-  :after org-roam)
+;; (use-package websocket
+;;   :after org-roam)
 
-(use-package org-roam-ui
-  :after org-roam
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t))
+;; (use-package org-roam-ui
+;;   :after org-roam
+;;   :config
+;;   (setq org-roam-ui-sync-theme t
+;;         org-roam-ui-follow t
+;;         org-roam-ui-update-on-save t
+;;         org-roam-ui-open-on-start t))
 
 ;; Paredit
 (use-package paredit
   :hook
   (lisp-mode . paredit-mode)
   (scheme-mode . paredit-mode)
-  (clojure-mode . paredit-mode))
+  (clojure-mode . paredit-mode)
+  (cider-repl-mode . paredit-mode)
+  (emacs-lisp-mode . paredit-mode)
+  (lisp-data-mode . paredit-mode))
 
 ;; Documentation
 (use-package devdocs
@@ -761,6 +705,29 @@
   (setq sideline-flymake-display-mode 'line)
   (setq sideline-backends-right '(sideline-flymake)
         sideline-priority 100))
+
+
+;; Debugging
+(use-package dape
+  :config
+  ;; Turn on global bindings for setting breakpoints with mouse
+  (dape-breakpoint-global-mode)
+
+  ;; Info buffers to the right
+  (setq dape-buffer-window-arrangement 'right)
+
+  ;; Pulse source line (performance hit)
+  (add-hook 'dape-display-source-hook 'pulse-momentary-highlight-one-line)
+
+  ;; Showing inlay hints
+  (setq dape-inlay-hints t)
+
+  ;; Save buffers on startup, useful for interpreted languages
+  (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
+
+  ;; Kill compile buffer on build success
+  (add-hook 'dape-compile-hook 'kill-buffer))
+
 
 ;; LSP + Languages
 
@@ -960,3 +927,4 @@
 
 ;; Protobuf
 (use-package protobuf-mode)
+(put 'narrow-to-region 'disabled nil)
