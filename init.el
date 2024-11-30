@@ -190,9 +190,9 @@
   (setq modus-themes-to-toggle '(modus-vivendi modus-operandi))
   (setq modus-themes-italic-constructs t))
 
-;; (use-package standard-themes
-;;   :config
-;;   (setq standard-themes-italic-constructs t))
+(use-package standard-themes
+  :config
+  (setq standard-themes-italic-constructs t))
 
 (global-unset-key (kbd "C-z"))
 
@@ -563,10 +563,10 @@
   :ensure t
   :bind ("C-c D" . docker))
 
-(use-package plz-see)
+;; (use-package plz-see)
 
 ;; RMSBolt (Godbolt)
-(use-package rmsbolt)
+;; (use-package rmsbolt)
 
 ;; Dumb-Jump
 (use-package dumb-jump
@@ -763,7 +763,9 @@
   (add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
   (setq eglot-connect-timeout 60)
 
-  (setq eglot-ignored-server-capabilities '(:hoverProvider))
+  (setq eglot-ignored-server-capabilities '(:hoverProvider
+                                            :documentHighlightProvider))
+  (fset #'jsonrpc--log-event #'ignore)
   )
 
 (with-eval-after-load 'eglot
@@ -860,10 +862,10 @@
 ;;   ("scala" . scala-mode))
 
 ;; Coq
-(use-package proof-general)
-(use-package company-coq
-  :hook
-  (coq-mode . company-coq))
+;; (use-package proof-general)
+;; (use-package company-coq
+;;   :hook
+;;   (coq-mode . company-coq))
 
 ;; Haskell
 (use-package haskell-mode)
