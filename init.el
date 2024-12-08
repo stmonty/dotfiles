@@ -183,9 +183,9 @@
         `(,@modus-themes-common-palette-overrides
           ,@modus-themes-preset-overrides-intense))
 
-  (setq modus-vivendi-palette-overrides
-        `(,@modus-themes-common-palette-overrides
-          ,@modus-themes-preset-overrides-faint))
+  ;; (setq modus-vivendi-palette-overrides
+  ;;       `(,@modus-themes-common-palette-overrides
+  ;;         ,@modus-themes-preset-overrides-faint))
   
   (setq modus-themes-to-toggle '(modus-vivendi modus-operandi))
   (setq modus-themes-italic-constructs t))
@@ -708,6 +708,7 @@
 
 
 ;; Debugging
+(setq gdb-debuginfod-enable-setting nil)
 (use-package dape
   :config
   ;; Turn on global bindings for setting breakpoints with mouse
@@ -774,21 +775,6 @@
 ;; (add-hook 'eglot-managed-mode-hook 
 ;;        (lambda () (setq eldoc-documentation-strategy 
 ;;                         #'eldoc-documentation-compose)))
-
-;; (use-package eldoc-box
-;;   :bind
-;;   ("C-h /" . 'eldoc-box-help-at-point)
-;;   :config
-;;   (setq eldoc-box-max-pixel-height 500
-;;         eldoc-box-max-pixel-width  500))
-
-;; ;;(add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t)
-
-;; (defun my-eldoc-box-setup ()
-;;   (set-face-attribute 'eldoc-box-body nil :font (face-attribute 'default :font)))
-
-;; (add-hook 'eldoc-box-hover-mode-hook 'my-eldoc-box-setup)
-
 
 ;; Python
 (use-package python-mode)
