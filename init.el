@@ -133,6 +133,8 @@
 (set-face-attribute 'default nil :height 100)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
+(add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
+
 ;; Initialize package sources
 (require 'package)
 
@@ -160,10 +162,21 @@
 (use-package exec-path-from-shell)
 (exec-path-from-shell-initialize)
 
-
 (use-package ef-themes
   :config
   (load-theme 'ef-elea-dark))
+
+;; (use-package spacious-padding
+;;   :config
+;;   (setq spacious-padding-widths
+;;       '( :internal-border-width 15
+;;          :header-line-width 4
+;;          :mode-line-width 2
+;;          :tab-width 4
+;;          :right-divider-width 30
+;;          :scroll-bar-width 8))
+;;   (spacious-padding-mode 1)
+;; )
 
 (use-package modus-themes
   :config
@@ -316,11 +329,11 @@
 			            (bookmarks . 5)))
 
 ;; Yasnippet
-(use-package yasnippet
-  :init
-  (yas-global-mode 1))
-(use-package yasnippet-snippets
-  :after yasnippet)
+;; (use-package yasnippet
+;;   :init
+;;   (yas-global-mode 1))
+;; (use-package yasnippet-snippets
+;;   :after yasnippet)
 
 ;; Company
 (use-package company
@@ -344,8 +357,8 @@
 		'(:with company-yasnippet))))
 
 ;; add yasnippet to all backends
-(setq company-backends
-      (mapcar #'stm/company-backend-with-yas company-backends))
+;; (setq company-backends
+;;       (mapcar #'stm/company-backend-with-yas company-backends))
 
 (use-package which-key
   :init
@@ -588,6 +601,22 @@
   :if (executable-find "direnv")
   :hook (after-init . envrc-global-mode))
 
+(defun pyvenv-create (path)
+  "Create a .envrc file in the current directory for the given PATH and run `envrc-allow`."
+  (interactive "DPath to virtual environment: ")
+  (let ((envrc-file (expand-file-name ".envrc" default-directory))
+        (virtual-env (directory-file-name (expand-file-name path))))
+    ;; Write the .envrc file
+    (with-temp-file envrc-file
+      (insert (format "export VIRTUAL_ENV=%s\n" virtual-env))
+      (insert (format "export PATH=%s/bin:$PATH\n" virtual-env)))
+    ;; Notify the user
+    (message ".envrc file created at %s" envrc-file)
+    ;; Run envrc-allow
+    (when (fboundp 'envrc-allow)
+      (envrc-allow))))
+
+
 (use-package markdown-mode)
 
 ;; Org Mode and Roam
@@ -765,13 +794,12 @@
   (setq eglot-connect-timeout 60)
 
   (setq eglot-ignored-server-capabilities '(:hoverProvider
-                                            :documentHighlightProvider))
+                                            :documentHighlightProvider
+                                            :documentFormattingProvider
+                                            :documentRangeFormattingProvider))
   (fset #'jsonrpc--log-event #'ignore)
   )
 
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               `(c++-mode . ("clangd" "--header-insertion=never"))))
 ;; (add-hook 'eglot-managed-mode-hook 
 ;;        (lambda () (setq eldoc-documentation-strategy 
 ;;                         #'eldoc-documentation-compose)))
@@ -794,8 +822,13 @@
 ;; (use-package geiser-guile
 ;;   :after geiser)
 
+;; Kotlin
+(use-package kotlin-mode)
+
 ;; Clojure
-(use-package clojure-mode)
+(use-package clojure-mode
+  :mode "\\.jank\\'")
+
 (use-package cider
   :after clojure-mode
   :hook
@@ -805,16 +838,29 @@
 (use-package rust-mode)
 
 ;; C++ (cpp)
+;; (add-to-list 'eglot-server-programs
+;; 	     '((c++-mode) "clangd"))
 (add-to-list 'eglot-server-programs
-	     '((c++-mode) "clangd"))
+                 '((c++-mode c-mode)
+                   . ("clangd"
+                      "-j=8"
+                      "--log=error"
+                      "--malloc-trim"
+                      "--background-index"
+                      "--clang-tidy"
+                      "--completion-style=detailed"
+                      "--pch-storage=memory"
+                      "--header-insertion=never"
+                      "--header-insertion-decorators=0")))
+
 ;;(add-hook 'c++-mode-hook 'eglot-ensure)
 
 (use-package cmake-mode)
 (use-package meson-mode)
 
 ;; C
-(add-to-list 'eglot-server-programs
-             '((c-mode) "ccls"))
+;; (add-to-list 'eglot-server-programs
+;;              '((c-mode) "ccls"))
 ;;(add-hook 'c-mode-hook 'eglot-ensure)
 
 ;; Web Development
