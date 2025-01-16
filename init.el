@@ -83,6 +83,7 @@
 (set-face-attribute 'default nil :height 130)
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-c c") 'compile)
                                         ;
 (electric-pair-mode 1)
 
@@ -616,8 +617,11 @@
     (when (fboundp 'envrc-allow)
       (envrc-allow))))
 
+(use-package markdown-mode
+  :hook (markdown-mode . stm/markdown-setup))
 
-(use-package markdown-mode)
+(defun stm/markdown-setup ()
+  (variable-pitch-mode 1))
 
 ;; Org Mode and Roam
 (defun stm/org-setup ()
@@ -712,6 +716,9 @@
   (emacs-lisp-mode . paredit-mode)
   (lisp-data-mode . paredit-mode))
 
+;; GPTEL - AI Integration
+(use-package gptel)
+
 ;; Documentation
 (use-package devdocs
   :bind
@@ -789,7 +796,7 @@
   ;;(add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
   ;; gem install solargraph
   (add-to-list 'eglot-server-programs
-               '((ruby-mode) "solargraph"))
+               '((ruby-mode) "ruby-lsp"))
   (add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
   (setq eglot-connect-timeout 60)
 
