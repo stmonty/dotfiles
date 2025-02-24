@@ -130,7 +130,7 @@
 (global-set-key (kbd "C-x 3") #'stm/split-vertically)
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
-;;(set-face-attribute 'default nil :family "Ubuntu Mono")
+(set-face-attribute 'default nil :family "JetBrains Mono")
 (set-face-attribute 'default nil :height 100)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
@@ -617,6 +617,23 @@
     (when (fboundp 'envrc-allow)
       (envrc-allow))))
 
+(defun nix-shell-create (directory)
+  "Create a shell.nix file in DIRECTORY with default Nix shell setup."
+  (interactive "DSelect directory: ")
+  (let ((file-path (concat (file-name-as-directory directory) "shell.nix"))
+        (default-content
+         "{ pkgs ? import <nixpkgs> {} }:
+pkgs.mkShell {
+  buildInputs = [
+    pkgs.gcc
+  ];
+}"))
+    (if (file-exists-p file-path)
+        (message "shell.nix already exists in the selected directory.")
+      (with-temp-file file-path
+        (insert default-content))
+      (message "Created shell.nix in %s" directory))))
+
 (use-package markdown-mode
   :hook (markdown-mode . stm/markdown-setup))
 
@@ -717,7 +734,15 @@
   (lisp-data-mode . paredit-mode))
 
 ;; GPTEL - AI Integration
-(use-package gptel)
+(use-package gptel
+  :bind
+  ("C-c g g" . gptel)
+  ("C-c g m" . gptel-menu)
+  ("C-c g a" . gptel-add)
+  ("C-c g r" . gptel-rewrite)
+  :config
+  (setq gptel-default-mode 'org-mode)
+  (setq-default gptel-model 'gpt-4o))
 
 ;; Documentation
 (use-package devdocs
