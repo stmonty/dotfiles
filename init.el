@@ -827,10 +827,14 @@ pkgs.mkShell {
   ;; (add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
   (setq eglot-connect-timeout 60)
 
-  (setq eglot-ignored-server-capabilities '(:hoverProvider
-                                            :documentHighlightProvider
-                                            :documentFormattingProvider
+  ;; (setq eglot-ignored-server-capabilities '(:hoverProvider
+  ;;                                           :documentHighlightProvider
+  ;;                                           :documentFormattingProvider
+  ;;                                           :documentRangeFormattingProvider))
+
+  (setq eglot-ignored-server-capabilities '(:documentFormattingProvider
                                             :documentRangeFormattingProvider))
+  
   (fset #'jsonrpc--log-event #'ignore)
   )
 
@@ -879,7 +883,6 @@ pkgs.mkShell {
                    . ("clangd"
                       "-j=8"
                       "--log=error"
-                      "--malloc-trim"
                       "--background-index"
                       "--clang-tidy"
                       "--completion-style=detailed"
