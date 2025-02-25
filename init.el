@@ -57,6 +57,8 @@
         help-mode-hook
         elfeed-search-mode-hook
         elfeed-show-mode-hook
+        markdown-mode-hook
+        org-mode-hook
         devdocs-mode-hook
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
@@ -638,12 +640,12 @@ pkgs.mkShell {
   :hook (markdown-mode . stm/markdown-setup))
 
 (defun stm/markdown-setup ()
-  (variable-pitch-mode 1))
+  (variable-pitch-mode 0))
 
 ;; Org Mode and Roam
 (defun stm/org-setup ()
   (org-indent-mode)
-  (variable-pitch-mode 1))
+  (variable-pitch-mode 0))
 
 (defun stm/org-font-setup ()
   ;; Replace list hyphen with dot
