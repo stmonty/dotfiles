@@ -167,7 +167,7 @@
 
 (use-package ef-themes
   :config
-  (load-theme 'ef-elea-dark))
+  (load-theme 'ef-bio))
 
 ;; (use-package spacious-padding
 ;;   :config
@@ -824,7 +824,7 @@ pkgs.mkShell {
   ;; gem install solargraph
   (add-to-list 'eglot-server-programs
                '((ruby-mode) "ruby-lsp"))
-  (add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
+  ;; (add-to-list 'eglot-server-programs '((web-mode . ("typescript-language-server" "--stdio"))))
   (setq eglot-connect-timeout 60)
 
   (setq eglot-ignored-server-capabilities '(:hoverProvider
