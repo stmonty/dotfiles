@@ -167,7 +167,7 @@
 
 (use-package ef-themes
   :config
-  (load-theme 'ef-bio))
+  (load-theme 'ef-symbiosis))
 
 ;; (use-package spacious-padding
 ;;   :config
