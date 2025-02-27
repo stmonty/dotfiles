@@ -842,6 +842,15 @@ pkgs.mkShell {
 ;;        (lambda () (setq eldoc-documentation-strategy 
 ;;                         #'eldoc-documentation-compose)))
 
+
+(use-package eldoc-box
+  :bind
+  ("C-h ." . 'eldoc-box-help-at-point)
+  ;; :config
+  ;; (setq eldoc-box-max-pixel-height 300
+  ;;       eldoc-box-max-pixel-width  400)
+  )
+
 ;; Python
 (use-package python-mode)
 
