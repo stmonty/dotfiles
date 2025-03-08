@@ -85,8 +85,38 @@
 (set-face-attribute 'default nil :height 130)
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "C-c c") 'compile)
-                                        ;
+
+;; Adapted from emacs-compile-plus
+(defun stm/buffer-name(dir command)
+  "Return a function suitable for `compilation-buffer-name-function'.
+
+The returned function concatenates the DIR and COMMAND."
+  `(lambda (majormode)
+	 (concat "*" ,dir " - " ,command "*")))
+
+(defun stm/compile-plus(dir command)
+  "Compile by explicitly giving the DIR to compile the given COMMAND in and."
+  (interactive (list
+				(read-directory-name "Directory to compile in: ")
+				;; Rest is copied from `compile'.
+				(let ((command (eval compile-command)))
+				  (if (or compilation-read-command current-prefix-arg)
+					  (compilation-read-command command)))))
+  (let ((default-directory dir)
+		(compilation-buffer-name-function (stm/buffer-name dir command)))
+	(message "CMD:: %s" command)
+	(message "DIR:: %s" dir)
+	;; Rest is copied from `compile'.
+	(message "%s" (funcall compilation-buffer-name-function "my cmd"))
+	(unless (equal command (eval compile-command))
+	  (setq compile-command command))
+	(save-some-buffers (not compilation-ask-about-save)
+					   compilation-save-buffers-predicate)
+	(setq-default compilation-directory default-directory)
+	(compilation-start command nil)))
+
+(global-set-key (kbd "C-c c") 'stm/compile-plus)
+
 (electric-pair-mode 1)
 
 ;; Control warning level (C-h v "warning-minimum-level")
