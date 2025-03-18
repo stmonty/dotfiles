@@ -197,7 +197,7 @@ The returned function concatenates the DIR and COMMAND."
 
 (use-package ef-themes
   :config
-  (load-theme 'ef-symbiosis))
+  (load-theme 'ef-elea-dark))
 
 ;; (use-package spacious-padding
 ;;   :config
@@ -362,9 +362,9 @@ The returned function concatenates the DIR and COMMAND."
 			            (bookmarks . 5)))
 
 ;; Yasnippet
-;; (use-package yasnippet
-;;   :init
-;;   (yas-global-mode 1))
+(use-package yasnippet
+  :init
+  (yas-global-mode 1))
 ;; (use-package yasnippet-snippets
 ;;   :after yasnippet)
 
