@@ -63,7 +63,7 @@
         treemacs-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; (setq-default cursor-type 'bar)
+(setq xref-search-program 'ripgrep)
 
 ;; Custom variables
 (setq custom-file (concat user-emacs-directory "custom.el"))
