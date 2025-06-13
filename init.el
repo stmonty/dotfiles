@@ -52,6 +52,7 @@
 		term-mode-hook
 		shell-mode-hook
 		eshell-mode-hook
+        occur-mode-hook
         eat-mode-hook
         eww-mode-hook
         help-mode-hook
@@ -163,7 +164,7 @@ The returned function concatenates the DIR and COMMAND."
 (global-set-key (kbd "C-c e") #'stm/split-eshell)
 
 (set-face-attribute 'default nil :family "JetBrains Mono")
-(set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :height 90)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
 
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
@@ -774,7 +775,7 @@ pkgs.mkShell {
   ("C-c g r" . gptel-rewrite)
   :config
   (setq gptel-default-mode 'org-mode)
-  (setq-default gptel-model 'gpt-4o))
+  (setq-default gptel-model 'gpt-4.1))
 
 ;; Documentation
 (use-package devdocs
@@ -804,9 +805,6 @@ pkgs.mkShell {
 (setq gdb-debuginfod-enable-setting nil)
 (use-package dape
   :config
-  ;; Turn on global bindings for setting breakpoints with mouse
-  (dape-breakpoint-global-mode)
-
   ;; Info buffers to the right
   (setq dape-buffer-window-arrangement 'right)
 
