@@ -350,6 +350,8 @@ The returned function concatenates the DIR and COMMAND."
 (use-package embark-consult
   :after embark)
 
+(use-package wgrep)
+
 ;; Dashboard
 (use-package dashboard
   :config
@@ -879,9 +881,6 @@ pkgs.mkShell {
   ;;       eldoc-box-max-pixel-width  400)
   )
 
-;; Python
-(use-package python-mode)
-
 ;; Ruby
 ;;(add-hook 'ruby-mode-hook 'eglot-ensure)
 (use-package robe
@@ -908,6 +907,8 @@ pkgs.mkShell {
   :after clojure-mode
   :hook
   (clojure-mode . cider-mode))
+
+(use-package racket-mode)
 
 ;; Rust
 (use-package rust-mode)
@@ -1036,3 +1037,4 @@ pkgs.mkShell {
 ;; Protobuf
 (use-package protobuf-mode)
 (put 'narrow-to-region 'disabled nil)
+
