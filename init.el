@@ -200,6 +200,13 @@ The returned function concatenates the DIR and COMMAND."
   :config
   (load-theme 'ef-elea-dark))
 
+(use-package solarized-theme
+  :config
+  (setq x-underline-at-descent-line t)
+  (setq solarized-use-variable-pitch nil)
+  (setq solarized-highlight-numbers t)
+  (load-theme 'solarized-dark))
+
 ;; (use-package spacious-padding
 ;;   :config
 ;;   (setq spacious-padding-widths
@@ -573,22 +580,7 @@ The returned function concatenates the DIR and COMMAND."
 ;;   (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
 ;;         elfeed-show-entry-switch 'display-buffer)
 ;;   (setq elfeed-feeds
-;;         '(("https://thephd.dev/feed.xml" tech c++)
-;;           ("https://takeonrules.com/feed.xml" tech)
-;;           ("https://www.rousette.org.uk/index.xml" tech emacs)
-;;           ("https://lepisma.xyz/atom.xml" tech emacs)
-;;           ("https://karthinks.com/index.xml" tech emacs)
-;;           ("https://unixsheikh.com/feed.rss" tech unix foss)
-;;           ("https://sizeof.cat/index.xml" tech security)
-;;           ("https://inconvergent.net/atom.xml" tech art lisp)
-;;           ("https://chollinger.com/blog/index.xml" tech)
-;;           ("https://nullprogram.com/feed/" tech c)
-;;           ("https://two-wrongs.com/feed" tech math)
-;;           ("https://geo-ant.github.io/blog/feed.xml" tech c++ rust)
-;;           ("https://fasterthanli.me/index.xml" tech c++ rust)
-;;           ("https://thenumb.at/feed.xml" tech graphics)
-;;           ("https://batsov.com/atom.xml" tech ruby lisp ocaml)
-;;           ("https://matt.might.net/articles/feed.rss" tech plang)))
+;;         '())
 ;;   :bind
 ;;   ("C-x w" . elfeed))
 
@@ -763,10 +755,14 @@ pkgs.mkShell {
   :hook
   (lisp-mode . paredit-mode)
   (scheme-mode . paredit-mode)
+  (racket-mode . paredit-mode)
+  (racket-repl-mode . paredit-mode)
   (clojure-mode . paredit-mode)
   (cider-repl-mode . paredit-mode)
   (emacs-lisp-mode . paredit-mode)
-  (lisp-data-mode . paredit-mode))
+  (lisp-data-mode . paredit-mode)
+  :config
+  (define-key paredit-mode-map (kbd "M-?") nil))
 
 ;; GPTEL - AI Integration
 (use-package gptel
@@ -1020,7 +1016,7 @@ pkgs.mkShell {
 ;;  )
 
 ;; Elixir
-(use-package elixir-mode)
+;; (use-package elixir-mode)
 
 ;; Zig
 (use-package zig-mode)
