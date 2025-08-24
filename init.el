@@ -198,15 +198,13 @@ The returned function concatenates the DIR and COMMAND."
 
 (use-package ef-themes
   :config
-  ; (load-theme 'ef-elea-dark)
-  )
+  (load-theme 'ef-elea-dark))
 
 (use-package solarized-theme
   :config
   (setq x-underline-at-descent-line t)
   (setq solarized-use-variable-pitch nil)
-  (setq solarized-highlight-numbers t)
-  (load-theme 'solarized-dark))
+  (setq solarized-highlight-numbers t))
 
 ;; (use-package spacious-padding
 ;;   :config
