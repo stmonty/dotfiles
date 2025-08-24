@@ -198,7 +198,8 @@ The returned function concatenates the DIR and COMMAND."
 
 (use-package ef-themes
   :config
-  (load-theme 'ef-elea-dark))
+  ; (load-theme 'ef-elea-dark)
+  )
 
 (use-package solarized-theme
   :config
