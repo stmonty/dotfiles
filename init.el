@@ -37,6 +37,7 @@
 
 (column-number-mode)
 (global-display-line-numbers-mode t)
+(global-auto-revert-mode 1)
 (global-visual-line-mode 1)
 
 (setq auto-save-default nil)
@@ -83,7 +84,7 @@
 			    ))
 
 ;; Set font size
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 110)
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
@@ -128,7 +129,6 @@ The returned function concatenates the DIR and COMMAND."
 ;; Indenting
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
-(setq indent-line-function 'insert-relative)
 ;; Controls tab-width in Ruby-mode
 (setq ruby-indent-level 2)
 (setq-default c-basic-offset 4)
@@ -166,6 +166,7 @@ The returned function concatenates the DIR and COMMAND."
 (set-face-attribute 'default nil :family "JetBrains Mono")
 (set-face-attribute 'default nil :height 90)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
+(load-theme 'modus-vivendi-tinted)
 
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
@@ -196,16 +197,6 @@ The returned function concatenates the DIR and COMMAND."
 (use-package exec-path-from-shell)
 (exec-path-from-shell-initialize)
 
-(use-package ef-themes
-  :config
-  (load-theme 'ef-elea-dark))
-
-(use-package solarized-theme
-  :config
-  (setq x-underline-at-descent-line t)
-  (setq solarized-use-variable-pitch nil)
-  (setq solarized-highlight-numbers t))
-
 ;; (use-package spacious-padding
 ;;   :config
 ;;   (setq spacious-padding-widths
@@ -217,55 +208,6 @@ The returned function concatenates the DIR and COMMAND."
 ;;          :scroll-bar-width 8))
 ;;   (spacious-padding-mode 1)
 ;; )
-
-(use-package modus-themes
-  :config
-  (setq modus-themes-common-palette-overrides
-        '((fringe unspecified)
-          (fg-line-number-active fg-main)
-          (fg-line-number-inactive "gray50")
-          (bg-line-number-active unspecified)
-          (bg-line-number-inactive unspecified)
-
-          (fg-region unspecified)
-
-          (border-mode-line-active unspecified)
-          (border-mode-line-inactive unspecified)))
-
-  (setq modus-operandi-palette-overrides
-        `(,@modus-themes-common-palette-overrides
-          ,@modus-themes-preset-overrides-intense))
-
-  ;; (setq modus-vivendi-palette-overrides
-  ;;       `(,@modus-themes-common-palette-overrides
-  ;;         ,@modus-themes-preset-overrides-faint))
-  
-  (setq modus-themes-to-toggle '(modus-vivendi modus-operandi))
-  (setq modus-themes-italic-constructs t))
-
-(use-package standard-themes
-  :config
-  (setq standard-themes-italic-constructs t))
-
-(global-unset-key (kbd "C-z"))
-
-(defun stm/toggle-theme ()
-  "Toggles between a chosen light and dark theme"
-  (interactive)
-  (if (eq (car custom-enabled-themes) 'ef-elea-dark)
-      (progn (disable-theme 'ef-elea-dark)
-             (load-theme 'ef-elea-light))
-    (progn (disable-theme 'ef-elea-light)
-           (load-theme 'ef-elea-dark))))
-
-(defun catppuccin-toggle-theme ()
-  "Toggle between catppuccin-themes"
-  (interactive)
-  (if (eq catppuccin-flavor 'mocha)
-      (setq catppuccin-flavor 'latte)
-    (setq catppuccin-flavor 'mocha))
-  (catppuccin-reload))
-
 
 (use-package minions
   :config
@@ -380,12 +322,11 @@ The returned function concatenates the DIR and COMMAND."
 ;; Company
 (use-package company
   :bind (:map prog-mode-map
-              ("C-i" . company-indent-or-complete-common)
               ("C-M-i" . company-complete))
   :init
   (setq company-idle-delay 0.1)
   (setq company-tooltip-limit 8)
-  (setq company-minimum-prefix-length 2)
+  (setq company-minimum-prefix-length 3)
   (setq company-selection-wrap-around t)
   (setq company-require-match 'never)
   (global-company-mode))
@@ -611,11 +552,10 @@ The returned function concatenates the DIR and COMMAND."
 ;; Dumb-Jump
 (use-package dumb-jump
   :init
-  (setq dumb-jump-prefer-searcher 'rg)
+  (setq dumb-jump-force-searcher 'rg)
   (remove-hook 'xref-backend-functions #'etags--xref-backend)
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
-  (setq dumb-jump-disable-obsolete-warnings t)
   (dumb-jump-mode))
 
 ;; Undo
@@ -971,8 +911,23 @@ pkgs.mkShell {
 
 ;; Haskell
 (use-package haskell-mode)
- ;; :hook
- ;; (haskell-mode . haskell-unicode-input-method-enable))
+;; (haskell-mode . haskell-unicode-input-method-enable))
+
+;; Lean4
+;; (use-package nael
+;;   :vc (:lisp-dir "nael"
+;;        :url "https://codeberg.org/mekeor/nael.git")
+;;   :hook
+;;   (nael-mode . abbrev-mode))
+(defun stm/nael-indent-setup ()
+  "Use fixed tab stops for Nael indentation."
+  (setq-local indent-line-function #'indent-to-tab-stop)
+  (setq-local tab-stop-list (number-sequence 4 200 4)))
+
+(use-package nael
+  :hook
+  (nael-mode . abbrev-mode)
+  (nael-mode . stm/nael-indent-setup))
 
 ;; OCaml
 ;; (use-package tuareg
@@ -1030,6 +985,4 @@ pkgs.mkShell {
 (use-package nix-mode)
 
 ;; Protobuf
-(use-package protobuf-mode)
-(put 'narrow-to-region 'disabled nil)
-
+;; (use-package protobuf-mode)
