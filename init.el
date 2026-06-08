@@ -72,6 +72,14 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
+;; Local LLVM/MLIR modes.
+(let ((llvm-site-lisp (expand-file-name "site-lisp/llvm" user-emacs-directory)))
+  (when (file-directory-p llvm-site-lisp)
+    (add-to-list 'load-path llvm-site-lisp)
+    (require 'llvm-mode)
+    (require 'tablegen-mode)
+    (require 'mlir-mode)))
+
 ;; Set backup by copying to preserve hard-links
 (setq backup-by-copying-when-linked t)
 
@@ -166,7 +174,7 @@ The returned function concatenates the DIR and COMMAND."
 (set-face-attribute 'default nil :family "JetBrains Mono")
 (set-face-attribute 'default nil :height 90)
 ;;(set-face-attribute 'variable-pitch nil :family "Iosevka")
-(load-theme 'modus-vivendi-tinted)
+(load-theme 'wombat)
 
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
@@ -779,13 +787,34 @@ pkgs.mkShell {
 ;;           (c++ts-mode . clang-format)))
 ;;)
 
+(defvar stm/python-lsp-servers
+  '(("ty"           . ("ty" "server"))
+    ("pylsp"        . ("pylsp"))
+    ("pyright"      . ("pyright-langserver" "--stdio"))
+    ("basedpyright" . ("basedpyright-langserver" "--stdio"))
+    ("ruff"         . ("ruff" "server"))
+    ("jedi"         . ("jedi-language-server"))))
+
+(defun stm/python-eglot-contact (interactive)
+  (let ((available (cl-remove-if-not
+                    (lambda (entry) (executable-find (cadr entry)))
+                    stm/python-lsp-servers)))
+    (unless available
+      (user-error "No Python LSP server found on PATH (see `stm/python-lsp-servers')"))
+    (cdr (if (and interactive (cdr available))
+             (assoc (completing-read "Python LSP server: "
+                                     (mapcar #'car available)
+                                     nil t nil nil (caar available))
+                    available)
+           (car available)))))
+
 ;; Eglot
 (use-package eglot
   :bind
   ("C-c l" . 'stm/toggle-eglot)
   ("C-c a" . 'eglot-code-actions)
   :config
-  ;;(add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs '(python-mode . stm/python-eglot-contact))
   ;; gem install solargraph
   (add-to-list 'eglot-server-programs
                '((ruby-mode) "ruby-lsp"))
@@ -815,6 +844,13 @@ pkgs.mkShell {
   ;; (setq eldoc-box-max-pixel-height 300
   ;;       eldoc-box-max-pixel-width  400)
   )
+
+(use-package code-cells
+  :hook (python-mode . code-cells-mode-maybe)
+  :bind (:map code-cells-mode-map
+              ("C-c C-n" . code-cells-forward-cell)
+              ("C-c C-p" . code-cells-backward-cell)
+              ("C-c C-c" . code-cells-eval)))
 
 ;; Ruby
 ;;(add-hook 'ruby-mode-hook 'eglot-ensure)
@@ -919,15 +955,14 @@ pkgs.mkShell {
 ;;        :url "https://codeberg.org/mekeor/nael.git")
 ;;   :hook
 ;;   (nael-mode . abbrev-mode))
-(defun stm/nael-indent-setup ()
-  "Use fixed tab stops for Nael indentation."
-  (setq-local indent-line-function #'indent-to-tab-stop)
-  (setq-local tab-stop-list (number-sequence 4 200 4)))
+;; (defun stm/nael-indent-setup ()
+;;   "Use fixed tab stops for Nael indentation."
+;;   (setq-local indent-line-function #'indent-to-tab-stop)
+;;   (setq-local tab-stop-list (number-sequence 4 200 4)))
 
 (use-package nael
   :hook
-  (nael-mode . abbrev-mode)
-  (nael-mode . stm/nael-indent-setup))
+  (nael-mode . abbrev-mode))
 
 ;; OCaml
 ;; (use-package tuareg
@@ -958,16 +993,15 @@ pkgs.mkShell {
 ;;   (add-to-list 'auto-mode-alist '("\\.cr$" . crystal-mode)))
 
 ;; Julia
-;; (use-package julia-mode)
+(use-package julia-mode)
 
-;; (use-package julia-repl
-;;   :after julia-mode
-;;   :bind
-;;   (:map julia-mode-map
-;;         ("C-c C-e" . julia-repl-send-line)
-;;         ("C-c C-b" . julia-repl-send-buffer)
-;;         ("C-c C-r" . julia-repl-send-region))
-;;  )
+(use-package julia-snail
+  :after julia-mode
+  :hook (julia-mode . julia-snail-mode)
+  :custom
+  ;; Use eat instead of vterm to avoid the libvterm native module.
+  (julia-snail-terminal-type :eat)
+  (julia-snail-extensions '(repl-history)))
 
 ;; Elixir
 ;; (use-package elixir-mode)
